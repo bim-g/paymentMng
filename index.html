@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>School Control</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-route.min.js"></script>
+    <!-- <script src="lib/angular-sanitize.min.js"></script> -->
+    <style>
+        .modal{
+            display: block;
+        }
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="initApp" data-ng-init="initialization()">
+   
+    <div class="w3-sidebar w3-bar-block w3-black homenu w3-animate-left" style="width:50px;" ng-if="menu==true">
+        <div class="sidemenu" >
+            <a href="#" class="w3-bar-item w3-btn w3-hover-text-blue" ng-click="setactive('')" ><i class="w3-large fa fa-bars"></i></a>        
+            <a href="#!addAgent" class="w3-bar-item w3-btn" ng-click="setactive('newAgent')" ng-class="{activeMenu: activebtn=='newAgent'}" ><i class="w3-large fa fa-user-plus"></i></a>
+            <a href="#!listEmployee" class="w3-bar-item w3-btn " ng-click="setactive('allAgent')" ng-class="{activeMenu: activebtn=='allAgent'}" ><i class="w3-large fa fa-group"></i></a>
+            <a href="#!detailEmployee" class="w3-bar-item w3-btn " ng-click="setactive('detailAgent')" ng-class="{activeMenu: activebtn=='detailAgent'}" ><i class="w3-large fa fa-address-card"></i></a>
+            <a href="#!config" class="w3-bar-item w3-btn " ng-click="setactive('config')" ng-class="{activeMenu: activebtn=='config'}" ><i class="w3-large fa fa-gears"></i></a>
+        </div>
+        <div>
+        <button class="w3-bar-item w3-btn w3-hover-text-blue" ng-click="about=true"><i class="w3-large fa fa-question-circle"></i></button>        
+        <button class="w3-bar-item w3-btn w3-hover-pink" ng-click="logout()"><i class="w3-large fa fa-power-off"></i></button>
+        </div>
+    </div>
+    
+    <div ng-view style="margin-left:51px;"></div>
+
+    <!-- about modal -->
+    <div class="w3-modal" ng-class="{modal:about==true}">
+        <div class="w3-modal-content">
+            <header class="w3-green w3-center w3-xxlarge">Roll Number</header>
+            <ul class="w3-ul">
+                <li class="w3-li">201620904</li>
+                <li class="w3-li">201720644</li>
+                <li class="w3-li">201720655</li>
+            </ul>
+            <button class="w3-btn w3-red" ng-click="about=false" style="width: 100%;">ok</button>
+        </div>
+    </div>
+        
+    <script  src="js/index.js"></script>
+    <script  src="js/services.js"></script>
+    <script src="js/iniApp.js"></script>
+    <script src="js/appctrl.js"></script>
+</body>
+</html>

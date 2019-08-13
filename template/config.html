@@ -1,0 +1,258 @@
+<div class="w3-container" >
+    <div class="" >        
+        <div class="w3-container w3-border" style="margin-top:50px;">
+            <button class="w3-btn w3-green carret" ng-click="myconfig='departement'" ng-class="{activTab:myconfig=='departement'}"><i class="w3-jumbo  fa fa-cubes"></i></button>
+            <button ng-click="myconfig='services'"class="w3-btn w3-yellow carret" ng-class="{activTab:myconfig=='services'}"><i class="w3-jumbo fa fa-sitemap"></i></button>
+            <button ng-click="myconfig='salary'"class="w3-btn w3-pink carret" ng-class="{activTab:myconfig=='salary'}"><i class="w3-jumbo fa fa-briefcase"></i></button>
+            <button ng-click="myconfig='upgrade'"class="w3-btn w3-teal carret" ng-class="{activTab:myconfig=='upgrade'}"><i class="w3-jumbo fa fa-cog"></i></button>
+        </div>
+    <div class="w3-margin-bottom w3-border-bottom w3-border-left w3-border-right ">
+    <!-- departement -->
+    <div class="w3-animate-left" ng-if="myconfig=='departement'">
+        <div class="w3-green w3-center">    
+            <h2>Department <i class="w3-margin-left fa fa-cubes"></i></h2>
+        </div>
+        
+        <form ng-submit="addDepartement()" >
+            <div class="w3-container w3-card-4 w3-center">
+                <label class="w3-large">Add a department</label>
+                <div class="w3-row w3-section">
+                    <button type="submit" class="w3-btn w3-green w3-w3-col w3-margin-left w3-right" style="width:50px;" value="Add"><i class="fa fa-plus"></i></button>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round" ng-model="AddDepartName" name="AddDepartName" id="AddDepartName" type="text" placeholder="Entr Departement Name" >
+                    </div>                                       
+                </div>
+            </div>
+        </form>
+        <div class="w3-margin-top" >
+            <table class="w3-table w3-striped w3-bordered w3-hoverable ">
+                <tr class="w3-paddind w3-blue">
+                    <th>Name Departement</th>
+                    <th>Date creation</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="dep in departement">
+                        <td>{{dep.departName}}</td>
+                        <td>{{dep.datecreate}}</td>
+                        <td><button ng-click=""><i class="w3-xxlarge w3-text-blue fa fa-pencil"></button></i></td>
+                        <!-- dep.iddepart -->
+                    <td><button ng-click="deleteDep(dep.iddepart)"><i class="w3-xxlarge w3-text-red fa fa-remove"></button></i></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- services -->
+    <div class="w3-animate-left" ng-if="myconfig=='services'">
+        <div class="w3-yellow w3-center">    
+            <h2>Services <i class="w3-margin-left fa fa-sitemap"></i></h2>
+        </div>
+        <form ng-submit="addServices()">
+            <div class="w3-container w3-card-4 w3-center">
+                <label class="w3-large">Add a Services</label>
+                <div class="w3-row w3-section">
+                    <button class="w3-btn w3-green w3-w3-col w3-margin-left w3-right" style="width:50px;"><i class="fa fa-plus"></i></button>
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i>
+                    </div>
+                    <div class="w3-threequarter">
+                        <div class="w3-row">
+                            <div class="w3-col s6 m6 l6">
+                                <input class="w3-input w3-border" ng-model="servName" id="servName" name="servName" type="text" placeholder="Service Name" >
+                            </div>
+                            <select id="servidepart"  class="w3-select w3-border w3-round-xxlarge w3-col s6 m6 l6"  ng-model="servidepart">
+                                <option value="" disabled selected>Select departement</option>
+                                <option value="{{desp.iddepart}}" ng-repeat="desp in departement">{{desp.departName}}</option>
+                            </select>
+                    </div>
+                </div>
+                    
+                </div>
+            </div>
+        </form>
+        <div class="w3-margin-top" >
+            <table class="w3-table w3-striped w3-bordered w3-hoverable ">
+                <tr class="w3-paddind w3-blue">
+                    <th>Name Services</th>
+                    <th>Name Departement</th>
+                    <th>Date creation</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="serv in services">
+                    <td>{{serv.serviceName}}</td>
+                    <td>{{serv.departName}}</td>
+                    <td>{{serv.datecreate}}</td>
+                    <td><i class="w3-xxlarge w3-text-blue fa fa-pencil"></i></td>
+                    <!-- {{serv.idservice}} -->
+                    <td><i class="w3-xxlarge w3-text-red fa fa-remove"></i></td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+    <!-- post grad and salary-->
+    <div class="w3-animate-left" ng-if="myconfig=='salary'">
+        <div class="w3-pink w3-center">    
+            <h2>Post Grade<i class="w3-margin-left fa fa-briefcase"></i></h2>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-container  w3-col s6 l6 m6">
+                <form ng-submit="addServices()" class="w3-card-4">
+                    <div class="w3-container w3-black w3-padding w3-center">
+                        <header class="w3-large">Add a grade(Post) </header>
+                    </div>
+                    <div class="w3-container  ">                
+                        <div class="w3-section">
+                            <b>Enter a Grade</b>
+                            <input class="w3-input w3-border w3-round-large" ng-model="grade.post" name="grade.post" type="text" placeholder="Grade or Post" >
+                        </div>
+                        <div >
+                            <b>Define Net Salary</b>                    
+                            <input class="w3-input w3-border w3-round-large" ng-model="grade.salary" name="grade.salary" type="text" placeholder="Net Salary" >
+                        </div>
+                    </div>
+                    <div class="w3-section w3-light-gray w3-padding"> 
+                            <button type="submit" class="w3-btn w3-blue"  ><i class="w3-margin-right fa fa-legal"></i>Add</button>
+                    </div>
+                </form>
+            </div>
+            <div class="w3-container w3-col s6 m6 l6">
+                <form ng-submit="addServices()" class="w3-card-4 " >
+                    <div class="w3-container w3-black w3-padding w3-center">
+                        <header class="w3-large">Other Advantage</header>
+                    </div>
+                    <div class="w3-container  ">
+                        <div class="w3-section">
+                            <b>Marital Status</b> 
+                            <div class="w3-row-padding">
+                                <div class="w3-border w3-round w3-col s6">
+                                    <select name="" id="" class="w3-select">
+                                        <option value="" disabled selected>Select Post</option>
+                                        <option value="1" >Single</option>
+                                        <option value="2" >Maried</option>
+                                    </select>
+                                </div>
+                                <div class="w3-col s6">
+                                    <input class="w3-input w3-border w3-round-large" ng-model="grade.salary" name="grade.salary" type="text" placeholder="prime " >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <b>Prime for Children</b> 
+                            <div class="w3-row-padding">
+                                <div class="w3-border w3-round w3-col s6">
+                                    <select name="" id="" class="w3-select">
+                                        <option value="" disabled selected>Select Post</option>
+                                        <option value="1" >Director</option>
+                                        <option value="2" >Manager</option>
+                                        <option value="3" >Employee</option>
+                                    </select>
+                                </div>
+                                <div class="w3-col s6">
+                                    <input class="w3-input w3-border w3-round-large" ng-model="grade.salary" name="grade.salary" type="text" placeholder="prime per child" ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-section w3-light-gray w3-padding"> 
+                        <button type="submit" class="w3-btn w3-blue"  ><i class="w3-margin-right fa fa-legal"></i>Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="w3-margin-top w3-margin-bottom" >
+            <table class="w3-table-all">
+                <tr class="w3-paddind w3-blue">
+                    <th>Grade(Post)</th>
+                    <th >Net Salary</th>
+                    <th colspan="2">Marital Status</th>
+                    <th >Children</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tbody ng-repeat="conf in confSal">
+                    <tr>
+                        <td rowspan="2">{{conf.gradeName}}</td>
+                        <td rowspan="2">{{conf.netsalary}}</td>
+                        <th >{{conf.primePost[1].typeprime}}</th>
+                        <td >{{conf.primePost[1].amountPrime}}</td>
+                        <td rowspan="2">{{conf.childprime}}</td>
+                        <td rowspan="2"><i class="w3-xxlarge w3-text-blue fa fa-pencil"></i></td>
+                        <td rowspan="2"><i class="w3-xxlarge w3-text-red fa fa-remove"></i></td>
+                    </tr>
+                    <tr>
+                        <th>{{conf.primePost[0].typeprime}}</th>
+                        <td>{{conf.primePost[0].amountPrime}}</td>
+                    </tr>
+                </tbody>                          
+            </table>
+        </div>
+    </div>
+    <!-- manager a promotion of a employee -->
+   <div class="w3-animate-right " ng-if="myconfig=='upgrade'" style="min-width:500px;max-width:800px;"> 
+        <div class="w3-teal w3-center">    
+            <h2>Up Grade an Agent <i class="fa fa-cog"></i></h2>
+        </div>
+        <div class="w3-container" >
+            <div class="w3-container w3-black w3-padding w3-center">
+                <header class="w3-large">Udpdate an Employee </header>
+            </div>
+            <form action="">
+                <div class="w3-container">
+                    <div class="w3-section">
+                        Enter Matricul Numbe
+                        <div class="w3-row w3-border w3-round-xxlarge">
+                            <div class="w3-col s11">
+                            <input type="number" ng-model="agentMatricule" class="w3-input w3-round-xxlarge" placeholder="matricul Number">
+                        </div>
+                        <button type="submit" class="w3-col s1 w3-btn w3-round-xxlarge"><i class="fa fa-search-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        <form ng-submit="addServices()" class="w3-card-4 w3-margin-bottom">
+            <div class="w3-container">
+                <div class="w3-section">
+                    Select Departement
+                    <select ng-model="agentDepartement" class="w3-select w3-round-xxlarge w3-border">
+                        <option value="" disabled selected>Select Departement</option>
+                        <option value="1" >Finance</option>
+                        <option value="2" >Registration</option>
+                    </select>
+                </div>
+            </div>
+            <div class="w3-container">
+                <div class="w3-section">
+                    Select Services
+                    <select ng-model="agentDepartement" class="w3-select w3-round-xxlarge w3-border">
+                        <option value="" disabled selected>Select Service</option>
+                        <option value="1" >Comptability</option>
+                        <option value="2" >management</option>
+                    </select>
+                </div>
+            </div>
+            <div class="w3-container">
+                <div class="w3-section">
+                    Select Post
+                    <select ng-model="agentDepartement" class="w3-select w3-round-xxlarge w3-border">
+                        <option value="" disabled selected>Select Post</option>
+                        <option value="1" >Director</option>
+                        <option value="2" >Manager</option>
+                        <option value="2" >Employee</option>
+                    </select>
+                </div>
+            </div>
+            <div class="w3-container w3-padding w3-light-gray w3-center ">
+                <input type="reset" value="cancel" class="w3-red w3-btn " style="width:35%;">
+                <input type="submit" value="Update" class="w3-btn w3-blue " style="width:35%;">
+            </div>
+        </form>        
+    </div>
+    </div>
+</div></div>
+
+</div>
+<style>
+    .activTab{
+        border:solid 3px #2196F3;
+    }
+</style>

@@ -1,0 +1,147 @@
+<div class="w3-container">
+    <div class="w3-pink w3-center">        
+        <h2>DeTaill Employee</h2>
+    </div>    
+    <div class="w3-container ">
+        <div class="conthainer w3-center">
+            <form ng-submit="searchAgent()" class="w3-margin-bottom" >
+                <div class="w3-row w3-border w3-round-xxlarge rearch" >
+                    <input type="number" placeholder="Enter Matricul Number" ng-model="idAgent" >            
+                    <button type="submit" class=" w3-col" style="width: 50px;"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+        <!-- get user information -->
+        <div class="w3-row">
+            <div class="w3-card-4 w3-col s6">
+                <div class="w3-container w3-black w3-center">
+                    <h4>Employee Information</h4>
+                </div> 
+                <div class="w3-container">
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empname" name="fname" type="text" placeholder="First Name & Last Name" disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-phone"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empphone" name="lname" type="text" placeholder="Phone" disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-intersex"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empsexe" name="phone" type="text" placeholder="Sexe"disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-calendar"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empbirth" name="empbirth" type="text" placeholder="BirthDay"disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empemail" name="email" min="0" max="25" type="text" placeholder="Email@mail.com" disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-share-alt"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="empmaretal" name="empmaretal" type="text" placeholder="Maretal Status"disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-bar-chart"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="Level" name="phone" type="text" placeholder="Level"disabled>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-bank"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="services" name="phone" type="text" placeholder="services"disabled>
+                        </div>
+                    </div>
+                    <h4>Salary</h4>
+                    <div class="w3-row w3-section">
+                        <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-line-chart"></i>
+                        </div>
+                        <div class="w3-rest">
+                            <input class="w3-input w3-border" ng-model="totalSalary" name="totalSalary" type="text" placeholder="Salary " disabled>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="w3-container w3-col s6">
+                <div class="w3-container w3-black w3-center">
+                    <h4>Employee Dependency Information</h4>
+                </div>                  
+                <form ng-submit="studentpayed()" class="w3-card-4">
+                    <div class="w3-container">
+                        <div class="w3-section w3-row ">
+                            <div class="w3-col s6">
+                                <p>Wife <input type="radio" class="w3-radio" ng-model="agentFamily" value="wife" ></p>
+                            </div>
+                            <div class="w3-col s6">                                
+                                <p>Child <input type="radio" class="w3-radio" ng-model="agentFamily" value="child"></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="w3-section">
+                            Name of {{agentFamily}}
+                            <input class="w3-input w3-border" ng-model="efamilyname" name="fname" type="text"  placeholder="FName and LName">
+                        </div>                     
+                        <div class="w3-section">
+                            Bithday
+                            <input class="w3-input w3-border" ng-model="efamilybirth" name="amount"  type="date" placeholder="Birthday">
+                        </div>               
+                        <div class="w3-section">
+                            Sexe
+                            <select class="w3-select" ng-model="efamilysexe">
+                                <option value="" disabled selected>Select the Sexe</option>
+                                <option value="Male" >Male</option>
+                                <option value="Female" >Female</option>
+                            </select>
+                            <input class="w3-input w3-border" ng-model="finamount" name="amount"  type="date" placeholder="Birthday">
+                        </div>               
+                    </div>
+                    <div class="w3-margin-top w3-padding-16 w3-light-gray w3-center">
+                        <input type="reset" class="w3-btn w3-red w3-margin-right" value="Cancel" style="width:35%;">
+                        <input type="submit" class="w3-btn w3-blue " value="Add" style="width:35%;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    <div ng-if="nbenfant>0" class="w3-center">
+        <div class="w3-yellow ">        
+            <h2>Employee Dependancies</h2>
+        </div>
+        <table class="w3-table w3-striped w3-bordered w3-hoverable w3-margin w3-card-4 " >
+            <tr class="w3-black">
+                <th>FName & LName</th>
+                <th>Sexe</th>
+                <th>Relation</th>
+                <th>Birthday</th>
+            </tr> 
+            <tr ng-repeat="std in familly">
+                <td>{{std.depName}}</td>
+                <td>{{std.depsexe}}</td>    
+                <td>{{std.depRelat}}</td>
+                <td>{{std.depbirthday}}</td>
+            </tr>
+        </table>
+    </div>
+</div>

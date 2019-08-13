@@ -1,0 +1,46 @@
+<div class="w3-container home " >
+    <div class="w3-center" style="margin-top:50px;">
+        <div class="container w3-center ">
+            <form ng-submit="searchAgentt()" class="w3-margin-bottom" >
+                <div class="w3-row w3-border w3-round-xxlarge rearch" >
+                    <input type="search" placeholder="Enter Matricul Number or email" ng-model="keyword">            
+                    <button type="submit" class=" w3-col" style="width: 50px;"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+        </div>
+        <div class="w3-border-bottom w3-padding boxCarret">
+            <button class="w3-btn w3-teal carret" ng-click="fetchLink('addAgent')"><i class="w3-jumbo  fa fa-user-plus"></i></button>
+            <button ng-click="fetchLink('detailEmployee')"class="w3-btn w3-pink carret"><i class="w3-jumbo fa fa-address-card"></i></button>
+            <button ng-click="fetchLink('listEmployee')"class="w3-btn w3-yellow carret"><i class="w3-jumbo fa fa-group"></i></button>
+            <button ng-click="fetchLink('config')"class="w3-btn w3-green carret"><i class="w3-jumbo fa fa-gears"></i></button>
+        </div>
+    </div>
+    <div class="w3-text-gray w3-padding w3-center" ng-if="nodata==true">
+        <h2>No Data correspondind to your research</h2>
+    </div>
+    <div class="w3-text-gray w3-padding " style="min-width: 450px;max-width:900px;" ng-if="getdata>0"> 
+        <div class="w3-text-gray w3-padding w3-center" >
+            <h2>search result</h2>
+        </div>       
+        <table class="w3-table w3-striped w3-bordered ">
+            <tr class="w3-teal">
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Sexe</th>
+                <th>Birthday</th>
+                <th>email</th>
+                <th>telephone</th>
+                <th></th>
+            </tr>               
+            <tr ng-repeat="std in agents">
+                <td>{{std.Fname}}</td>
+                <td>{{std.Lname}}</td>
+                <td>{{std.sexe}}</td>
+                <td>{{std.birthday | date}}</td>
+                <td>{{std.email}}</td>
+                <td>{{std.phone}}</td>
+                <td style="width: 80px;"><a href="#!finance/{{std.idemployee}}" class="w3-btn" ><i class="w3-xlarge w3-text-green fa fa-pencil"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>

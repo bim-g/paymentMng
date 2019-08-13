@@ -1,0 +1,91 @@
+<div class="w3-mosdal" >
+    <div class="w3-modal-content">
+        <div class="w3-container w3-teal w3-center">
+            <h2>New Agent</h2>
+        </div>                  
+        <form ng-submit="AddEmployee()">
+            <div class="w3-container">
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round-large" ng-model="emloyee.fname" name="fname" type="text" placeholder="First Name" >
+                    </div>
+                </div>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round-large" ng-model="emloyee.lname" name="lname" type="text" placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-calendar"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round-large" ng-model="emloyee.birthday" name="birthday" type="date" placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round-large" ng-model="emloyee.email" name="email" type="email" placeholder="Email@mail.com">
+                    </div>
+                </div>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-phone"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input class="w3-input w3-border w3-round-large" ng-model="emloyee.phone" name="phone" type="text" placeholder="Phone">
+                    </div>
+                </div>
+                <hr>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-intersex"></i>
+                    </div>
+                    <div class="w3-rest w3-center ">
+                        <label  class="w3-large">Male</label> <input class="w3-radio w3-margin-right" ng-model="emloyee.sexe" value="male" type="radio" >
+                        <label  class="w3-large">Female</label> <input class="w3-radio" ng-model="emloyee.sexe" value="female" type="radio" >
+                    </div>
+                </div>
+                <hr>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-handshake-o"></i>
+                    </div>
+                    <div class="w3-rest w3-center ">
+                        <select class="w3-select w3-round-large" ng-model="emloyee.maretal">
+                            <option value="" disabled selected>Maretal Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Maried">Maried</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>               
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-bank"></i></div>
+                    <div class="w3-rest">
+                        <select class="w3-select w3-round-large" ng-model="emloyee.service">
+                            <option value="" disabled selected>Choose The Services</option>
+                            <option ng-repeat="serv in Myservices" value="{{serv.idservice}}">{{serv.serviceName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="w3-row w3-section">
+                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-universal-access"></i></div>
+                    <div class="w3-rest">                            
+                        <select class="w3-select s3-center w3-round-large" ng-model="employee.level">
+                            <option value="" disabled selected>Choose Level</option>
+                            <option value="{{grd.idgrade}}"  ng-repeat="grd in grades">{{grd.gradeName}}</option>                            
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-margin-top w3-padding-16 w3-light-gray w3-center">
+                <input type="reset" class="w3-btn w3-red w3-margin-right" value="Cansel" ng-click="newstudent=false" style="width:35%;">
+                <input type="submit" class="w3-btn w3-blue " value="Register" style="width:35%;">
+            </div>
+        </form>
+    </div>
+</div>

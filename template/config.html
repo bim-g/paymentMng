@@ -19,20 +19,20 @@
                 <div class="w3-row w3-section">
                     <button type="submit" class="w3-btn w3-green w3-w3-col w3-margin-left w3-right" style="width:50px;" value="Add"><i class="fa fa-plus"></i></button>
                     <div class="w3-rest">
-                        <input class="w3-input w3-border w3-round" ng-model="AddDepartName" name="AddDepartName" id="AddDepartName" type="text" placeholder="Entr Departement Name" >
+                        <input class="w3-input w3-border w3-round" ng-model="AddDepartName" name="AddDepartName" id="AddDepartName" type="text" oninput="w3.filterHTML('#listDepartment','.item',this.value)" placeholder="Entr Departement Name" >
                     </div>                                       
                 </div>
             </div>
         </form>
         <div class="w3-margin-top" >
-            <table class="w3-table w3-striped w3-bordered w3-hoverable ">
+            <table class="w3-table w3-striped w3-bordered w3-hoverable " id="listDepartment">
                 <tr class="w3-paddind w3-blue">
                     <th>Name Departement</th>
                     <th>Date creation</th>
                     <th></th>
                     <th></th>
                 </tr>
-                <tr ng-repeat="dep in departement">
+                <tr ng-repeat="dep in departement" class="item">
                         <td>{{dep.departName}}</td>
                         <td>{{dep.datecreate}}</td>
                         <td><button ng-click=""><i class="w3-xxlarge w3-text-blue fa fa-pencil"></button></i></td>
@@ -57,20 +57,19 @@
                     <div class="w3-threequarter">
                         <div class="w3-row">
                             <div class="w3-col s6 m6 l6">
-                                <input class="w3-input w3-border" ng-model="servName" id="servName" name="servName" type="text" placeholder="Service Name" >
+                                <input class="w3-input w3-border" ng-model="servName" id="servName" name="servName" type="text" placeholder="Service Name" oninput="w3.filterHTML('#listSerices','.servs',this.value)">
                             </div>
                             <select id="servidepart"  class="w3-select w3-border w3-round-xxlarge w3-col s6 m6 l6"  ng-model="servidepart">
                                 <option value="" disabled selected>Select departement</option>
                                 <option value="{{desp.iddepart}}" ng-repeat="desp in departement">{{desp.departName}}</option>
                             </select>
                     </div>
-                </div>
-                    
+                </div>                    
                 </div>
             </div>
         </form>
         <div class="w3-margin-top" >
-            <table class="w3-table w3-striped w3-bordered w3-hoverable ">
+            <table class="w3-table w3-striped w3-bordered w3-hoverable " id="listSerices">
                 <tr class="w3-paddind w3-blue">
                     <th>Name Services</th>
                     <th>Name Departement</th>
@@ -78,7 +77,7 @@
                     <th></th>
                     <th></th>
                 </tr>
-                <tr ng-repeat="serv in services">
+                <tr ng-repeat="serv in services" class="servs">
                     <td>{{serv.serviceName}}</td>
                     <td>{{serv.departName}}</td>
                     <td>{{serv.datecreate}}</td>
@@ -112,7 +111,7 @@
                         </div>
                     </div>
                     <div class="w3-section w3-light-gray w3-padding"> 
-                            <button type="submit" class="w3-btn w3-blue"  ><i class="w3-margin-right fa fa-legal"></i>Add</button>
+                            <button type="submit" class="w3-btn w3-blue"  >Add<i class="w3-margin-left fa fa-plus"></i></button>
                     </div>
                 </form>
             </div>
@@ -126,8 +125,8 @@
                             <b>Marital Status</b> 
                             <div class="w3-row-padding">
                                 <div class="w3-border w3-round w3-col s6">
-                                    <select name="" id="" class="w3-select">
-                                        <option value="" disabled selected>Select Post</option>
+                                    <select ng-model="status" class="w3-select">
+                                        <option value="" disabled selected>Select Status</option>
                                         <option value="1" >Single</option>
                                         <option value="2" >Maried</option>
                                     </select>
@@ -141,7 +140,7 @@
                             <b>Prime for Children</b> 
                             <div class="w3-row-padding">
                                 <div class="w3-border w3-round w3-col s6">
-                                    <select name="" id="" class="w3-select">
+                                    <select ng-model="primChild" class="w3-select">
                                         <option value="" disabled selected>Select Post</option>
                                         <option value="1" >Director</option>
                                         <option value="2" >Manager</option>
@@ -154,7 +153,7 @@
                         </div>
                     </div>
                     <div class="w3-section w3-light-gray w3-padding"> 
-                        <button type="submit" class="w3-btn w3-blue"  ><i class="w3-margin-right fa fa-legal"></i>Add</button>
+                        <button type="submit" class="w3-btn w3-blue">Add<i class="w3-margin-left fa fa-plus"></i></button>
                     </div>
                 </form>
             </div>

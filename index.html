@@ -17,8 +17,7 @@
         }
     </style>
 </head>
-<body ng-app="myApp" ng-controller="initApp" data-ng-init="initialization()">
-   
+<body ng-app="myApp" ng-controller="initApp" data-ng-init="initialization()">   
     <div class="w3-sidebar w3-bar-block w3-black homenu w3-animate-left" style="width:50px;" ng-if="menu==true">
         <div class="sidemenu" >
             <a href="#" class="w3-bar-item w3-btn w3-hover-text-blue" ng-click="setactive('')" ><i class="w3-large fa fa-bars"></i></a>        
@@ -28,29 +27,45 @@
             <a href="#!config" class="w3-bar-item w3-btn " ng-click="setactive('config')" ng-class="{activeMenu: activebtn=='config'}" ><i class="w3-large fa fa-gears"></i></a>
         </div>
         <div>
-        <button class="w3-bar-item w3-btn w3-hover-text-blue" ng-click="about=true"><i class="w3-large fa fa-question-circle"></i></button>        
-        <button class="w3-bar-item w3-btn w3-hover-pink" ng-click="logout()"><i class="w3-large fa fa-power-off"></i></button>
+            <button class="w3-bar-item w3-btn w3-hover-text-blue" ng-click="aBout()"><i class="w3-large fa fa-question-circle"></i></button>        
+            <button class="w3-bar-item w3-btn w3-hover-pink" ng-click="logout()"><i class="w3-large fa fa-power-off"></i></button>
         </div>
-    </div>
-    
+    </div>    
     <div ng-view style="margin-left:51px;"></div>
-
     <!-- about modal -->
     <div class="w3-modal" ng-class="{modal:about==true}">
         <div class="w3-modal-content">
-            <header class="w3-green w3-center w3-xxlarge">Roll Number</header>
+            <header class="w3-green w3-center w3-xxlarge">About Me! <i class="fa fa-address-book"></i></header>
             <ul class="w3-ul">
-                <li class="w3-li">201620904</li>
-                <li class="w3-li">201720644</li>
-                <li class="w3-li">201720655</li>
+                <li class="w3-li w3-row">
+                    <i class="w3-xxlarge fa fa-graduation-cap w3-col S2 m2 l2"></i>
+                    <span class="w3-col S9 m9 l9"> Ibrahim Mussa B </span></li>
+                <li class="w3-li w3-row">
+                    <i class="w3-xxlarge fa fa-envelope-o w3-text-blue w3-col S2 m2 l2"></i>
+                    <span class="w3-col S9 m9 l9"> ibmussa@outlook.fr</span></li>
+                <li class="w3-li w3-row">
+                    <i class="w3-xxlarge fa fa-facebook-official w3-text-blue w3-col S2 m2 l2"></i>
+                    <span class="w3-col S9 m9 l9"> ibmussa </span></li>
+                <li class="w3-li w3-row">
+                    <i class="w3-xxlarge fa fa-twitter-square w3-text-aqua w3-col S2 m2 l2"></i>
+                    <span class="w3-col S9 m9 l9"> ibmussa </span></li>
+                <li class="w3-li w3-row">
+                    <i class="w3-xxlarge fa fa-github-square w3-text-purple w3-col S2 m2 l2"></i>
+                    <span class="w3-col S9 m9 l9"> bim-g</span></li>
             </ul>
             <button class="w3-btn w3-red" ng-click="about=false" style="width: 100%;">ok</button>
         </div>
     </div>
-        
+    <!-- inlude message templete -->
+    <div ng-include="'./template/message/alert.html'"></div>  
+    <div ng-include="'./template/message/danger.html'"></div>  
+    <div ng-include="'./template/message/succes.html'"></div>  
+    <div ng-include="'./template/message/confirm.html'"></div>  
+    <!--  inslude js script -->
+    <script src="js/w3.js"></script>
     <script  src="js/index.js"></script>
     <script  src="js/services.js"></script>
     <script src="js/iniApp.js"></script>
-    <script src="js/appctrl.js"></script>
+    <!-- <script src="js/appctrl.js"></script> -->
 </body>
 </html>

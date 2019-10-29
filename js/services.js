@@ -111,7 +111,7 @@ app.service("initApp",function($http,$window,$location){
             url:link+"myconfig.php",
             params:{                
                 config:"deleteDepartment",
-                idServices:idServ
+                idDepart:idServ
             }            
         }).then(function(response){
             cb(response.data); 

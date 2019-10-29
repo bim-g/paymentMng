@@ -1,33 +1,76 @@
-app.controller("initApp",function($scope,$location,$window,initApp){
-	$scope.about=false;
-	$scope.logout=false;
+app.controller("initApp",function($rootScope,$scope,$location,$window,initApp){
+    $scope.confirm=false;
+    $scope.alert=false;
+    $scope.danger=false;
+    $scope.succes=false;
+    $scope.logout=false;
+    
 	initApp.initilize();
 	$scope.connect=false;
-
-	$scope.logout=function(){
-		if(confirm("Would you like to log out?")){
-			$window.sessionStorage.clear();
-			initApp.initilize();
-			$scope.menu=false;
-		}	
-	};
+    $scope.aBout=function(){
+        $scope.about=true;
+    };
+	$scope.logout=function(){		
+        $scope.msg="Would you like to log out?"	;
+        $scope.myfunc="gogout()";
+        $scope.confirm=true;
+        $scope.operation="gogout";
+    };
+    $scope.gogout=function(){
+        $window.sessionStorage.clear();
+        initApp.initilize();
+        $scope.menu=false;
+    };
 	$scope.$on("detailAgent",function(e){
-		$scope.activebtn='detailAgent'
+		$scope.activebtn='detailAgent';
 	});
 	$scope.$on("allAgent",function(e){
-		$scope.activebtn='allAgent'
+		$scope.activebtn='allAgent';
 	});
 	$scope.$on("newAgent",function(e){
-		$scope.activebtn='newAgent'
+		$scope.activebtn='newAgent';
 	});
 	$scope.$on("config",function(e){
-		$scope.activebtn='config'
+		$scope.activebtn='config';
 	});
 
 	$scope.$on('login',function(e){
 		initApp.initilize();
 		$scope.menu=true;
 	});
+	
+    $scope.conFirm=function(){
+        $scope.confirm=true;
+    };
+    
+    $scope.aleRt=function(){
+        $scope.alert=true;
+    };
+    $scope.danGer=function(){
+        $scope.danger=true;        
+    };
+    $scope.sucCes=function(){
+        $scope.succes=true;
+    };
+    $scope.$on('confirm',function(e,data){
+        $scope.msg=data.msg;
+        $scope.operation=data.operation;
+        $scope.idvalue=data.id;
+		$scope.conFirm();
+    });
+	$scope.$on('alert',function(e,data){
+        $scope.msgAlert=data.msg;
+		$scope.aleRt();
+    });
+	$scope.$on('succes',function(e,data){
+        $scope.msg=data.msg;
+		$scope.sucCes();
+    });
+	$scope.$on('danger',function(e,data){
+        $scope.errorMsg=data.msg;
+		$scope.danGer();
+    });
+    
 	if($window.sessionStorage.menu){
 		$scope.menu=true;
 	}
@@ -40,10 +83,46 @@ app.controller("initApp",function($scope,$location,$window,initApp){
 		}
 		$scope.activebtn=$window.sessionStorage.activebtn;	
 	};
-	$scope.setactive("");
+    $scope.setactive("");
+    $scope.confirmOp=function(){
+        var func=$scope.operation;
+        var id=$scope.idvalue;
+        var data={
+            func:func,
+            id:id
+        };
+        if(func!=null){
+            $scope.$broadcast("yesConfirm",data);            
+        }
+        $scope.operation=null;
+        $scope.idvalue=null;
+    };
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            // if(id!=null){
+            //     //$scope[func](id);
+                $scope.logout(id);
+            // }else{
+                //$scope[func]();
+            //}
+        }
+    });
 });
 
 app.controller("login",function($scope,initApp){
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
 	$scope.connection=function(){
 		if(!angular.isUndefined($scope.loginUser)){
 			initApp.connection($scope.loginUser,function(r){
@@ -51,7 +130,7 @@ app.controller("login",function($scope,initApp){
 					initApp.initilize();
 					$scope.$emit('login');
 				}else{
-					alert(r);
+                    $scope.$emit('danger',{msg:r});
 				}
 			});			
 		}
@@ -59,6 +138,17 @@ app.controller("login",function($scope,initApp){
 });
 
 app.controller("homeCtrl",function($scope,$location,initApp){
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
     $scope.nodata=false;    
     $scope.researchdata=false;   
     
@@ -73,12 +163,12 @@ app.controller("homeCtrl",function($scope,$location,initApp){
 						$scope.nodata=true;
 					}
 				}else{
-					alert(r);
+                    $scope.$emit('danger',{msg:r});
 					$scope.nodata=false;
 				}
 			});
 		}else{
-			alert("Enter Matricul number or email to rearch");
+            $scope.$emit('alert',{msg:"Enter Matricul number or email to rearch"});
 		}	   
     };
     $scope.fetchLink=function(url){
@@ -89,39 +179,35 @@ app.controller("homeCtrl",function($scope,$location,initApp){
     $scope.mylogin=true;
 });
 app.controller("addAgentCtrl",function($scope,$location,initApp){
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
 	$scope.$emit("newAgent");
     $scope.newstudent=false;    
     $scope.AddEmployee=function(){
-        console.log($scope.emloyee);
-        // initApp.AddEmployee($scope.emloyee,function(r){
-        //     if(r=="add student"){
-        //         $scope.newstudent=false;
-        //         $scope.student.fname=null;
-        //         $scope.student.lname=null;
-        //         $scope.student.sexe=null;
-        //         $scope.student.phone=null;
-        //         $scope.student.email=null;
-        //         alert("Student Add successfully");
-        //     }else{
-        //         alert(r);
-        //     }
-        // }); 
+        console.log($scope.emloyee);        
     };
     
         initApp.getServices("services",function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.Myservices= r;
-                console.log(r)
             }else{
-                alert(r);
+                $scope.$emit('danger',{msg:r});      
             }
         });	
         initApp.getGrade(function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.grades= r;
-                console.log(r)
-            }else{
-                alert(r);
+            }else{                
+                $scope.$emit('danger',{msg:r});       
             }
         });	
     
@@ -145,13 +231,23 @@ app.controller("addAgentCtrl",function($scope,$location,initApp){
     $scope.mylogin=true;
 });
 app.controller("employeeListCtrl",function($scope,initApp){
-	
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
 	$scope.$emit("allAgent");
     initApp.searchAgent("",function(r){
         if(angular.isObject(r) && !angular.isUndefined(r)){
             $scope.employees=r;
-        }else{
-            alert(r);
+        }else{            
+            $scope.$emit('danger',{msg:r});
         }
     });
 
@@ -159,23 +255,36 @@ app.controller("employeeListCtrl",function($scope,initApp){
         initApp.studentinfos(function(){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.students=r;
-            }else{
-                alert(r);
+            }else{                
+                $scope.$emit('danger',{msg:r});
             }
         });
     };
+    $scope.search=function(){
+
+    };
 });
 app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp){
-	$scope.rollnumber;    
-	
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
+	$scope.rollnumber; 
 	$scope.$emit("detailAgent");
     $scope.getTransaction=function(iduser){
         initApp.getTransactions(iduser,function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.transactions=r;
                 $scope.transact=r.length;
-            }else{
-                console.log(r);
+            }else{                
+                $scope.$emit('danger',{msg:r});
             }
         });
     };
@@ -194,26 +303,24 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
                     $scope.empmaretal=employee[0].maretalStatus;
                     $scope.Level=employee[0].levelGrade;
                     $scope.services=employee[0].servicesWork;
-                    $scope.totalSalary=employee[0].salary;
-					// $scope.getTransaction($scope.idstudent);
-					console.log(employee[0])
+                    $scope.totalSalary=employee[0].salary;					
 					$scope.familly=famill;
 					$scope.nbenfant=famill.length;
 				}
                 else{
-                    alert(r);
+                    
+                    $scope.$emit('danger',{msg:r});
                 }
             });
         }else{
-            alert("enter a number");
+            $scope.$emit('alert',{msg:"enter a number"});
         }
     };
     if($routeParams.id){
         if(Number($routeParams.id)){
             $scope.idAgent=Number($routeParams.id);
             $scope.searchAgent();
-        }
-        
+        }        
     }
     $scope.studentpayed=function(){
         $scope.payment={
@@ -222,7 +329,7 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
             idtypeFess:$scope.finTypes,
             idstudent:$scope.rearch.idstudent,
             iduser:$window.sessionStorage.userId
-        }
+        };
         initApp.studentPay($scope.payment,function(r){
             if(r=="success pay"){
                 $scope.finBank=null;
@@ -231,12 +338,23 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
                 $scope.searchStudent();
             }
             else{
-                alert(r);
-            };
+                $scope.$emit('danger',{msg:r});
+            }
         });
     };
 });
 app.controller("congigCtrl",function($scope,initApp){
+    $scope.$on("yesConfirm",function(e,data){
+        var func=data.func;
+        var id=data.id;
+        if(func!=null){
+            if(id!=null){
+                $scope[func](id);
+            }else{
+                $scope[func]();
+            }
+        }
+    });
     $scope.myconfig="departement";
     $scope.editDepartment=false;
     $scope.$emit("config");
@@ -244,52 +362,59 @@ app.controller("congigCtrl",function($scope,initApp){
         initApp.getDepartment(function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.departement= r;
-            }else{
-                alert(r);
+            }else{                
+                $scope.$emit('danger',{msg:r});
             }
         });	
-    }
+    };
     $scope.getDepart();
     $scope.displayServices=function(){
         initApp.getServices("services",function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.services= r;
-            }else{
-                alert(r);
+            }else{                
+                $scope.$emit('danger',{msg:r});
             }
         });	
-    }
+    };
     $scope.displayServices();
     $scope.addDepartement=function(){
         var AddDepartName=$("AddDepartName").value;
         if(!angular.isUndefined(AddDepartName) && AddDepartName!=""){
             initApp.addDepartement(AddDepartName,function(r){
                 if(r=="success depart"){
-                    alert("Departement add successfully");
+                    $scope.$emit('succes',{msg:"Departement add successfully"});
                     $scope.AddDepartName=null;
                     $scope.getDepart();
-                }else{
-                    console.log(r);
+                }else{                    
+                    $scope.$emit('danger',{msg:r});
                 }       
             }); 
         }else{
-            alert("Enter a departement");
+            $scope.$emit('alert',{msg:"Enter a departement"});
         }
     };
     $scope.deleteDep=function(id){        
-        if(confirm("would like to delete these Departement?\nit will delete alse services related to it")){
-            initApp.deleteDepartment(id,function(r){
-                if(r=="delete_deport success"){
-                    $scope.getDepart();
-                    alert("Department Delete Succesfully");
-                }else{
-                    alert(r)
-                }
-            })
-        }
+        var data={
+            msg:"would like to delete these Departement?it will delete alse services related to it",
+            operation:"remouveDep",
+            id:id
+        };
+        $scope.$emit('confirm',data);
+    };
+    $scope.remouveDep=function(id){
+        $scope.$emit('alert',{msg:id});
+        initApp.deleteDepartment(id,function(r){
+            if(r=="delete_deport success"){
+                $scope.getDepart();
+                $scope.$emit('succes',{msg:"Department Delete Succesfully"});
+            }else{
+                $scope.$emit('danger',{msg:r});
+            }
+        });
     };
     $scope.addServices=function(){
-        var id=$("servidepart").value
+        var id=$("servidepart").value;
         var name =$("servName").value;
         if((!angular.isUndefined(id) && Number(id)) && (!angular.isUndefined(name) && name!="")){
             var serv={
@@ -298,24 +423,24 @@ app.controller("congigCtrl",function($scope,initApp){
             }            
             initApp.addServices(serv,function(r){
                 if(r=="success revices"){
-                    $scope.displayServices();
-                    alert("Service add Succesfully");
-                }else{
-                    alert(r);
+                    $scope.displayServices();                    
+                    $scope.$emit('succes',{msg:"Service add Succesfully"});
+                }else{                    
+                    $scope.$emit('danger',{msg:r});
                 }
             });
-        }else{
-            alert("You cant Empty services or Services to empty Departement");
+        }else{            
+            $scope.$emit('alert',{msg:"You cant Empty services or Services to empty Departement"});
         }
     };
     $scope.deleteServices=function(id){
         if(confirm("would like to delete these Services?")){
             initApp.deleteDepartment(id,function(r){
                 if(r=="delete_deport success"){
-                    $scope.displayServices();
-                    alert("Department Delete Succesfully");
-                }else{
-                    alert(r);
+                    $scope.displayServices();                    
+                    $scope.$emit('succes',{msg:"Department Delete Succesfully"});
+                }else{                    
+                    $scope.$emit('danger',{msg:r});
                 }
             });
         }

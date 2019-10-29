@@ -2,6 +2,7 @@
     class configurations{
         private $bdd;
         private $idServ;
+        private $iddep;
         private $nameServ;
         function __construct($base,$id,$name)
         {
@@ -117,7 +118,7 @@
         function deleteDepartment(){
             $req="DELETE FROM departement WHERE iddepart=:idDeprt"; 
             $serv=$this->deleteServices($this->idServ) ;
-            if($serv=="delete_serv success"){       
+            if($serv){       
                 try{
                     $q=$this->bdd->prepare($req); 
                     $q->bindParam(":idDeprt",$this->idServ);                         
@@ -128,7 +129,7 @@
                 }
             }
         }
-        function deleteServices($depart=null){
+        function deleteServices($depart=false){
             $req="DELETE FROM services WHERE idservice=:idDeprt";           
             if($depart!=null){
                 $req="DELETE FROM services WHERE iddepart=:idDeprt";  
@@ -141,7 +142,7 @@
                     $q->bindParam(":idDeprt",$this->idServ);
                 } 
                 $q->execute();
-                return "delete_serv success";
+                return true;
             }catch(Exception $ex){
                 echo "error_getPrime of a post=>".$ex->getMessage();
             }

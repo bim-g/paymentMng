@@ -1,7 +1,7 @@
 <?php
 // database configuration setup
     define("HOST", "localhost");
-    define("DATABASE", "root");
+    define("DATABASE", "sentinel");
     define("USER", "root");
     define("PASSWORD", "");
 

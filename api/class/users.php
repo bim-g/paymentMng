@@ -13,36 +13,21 @@
         private $Passwd;
         private $bdd;
 
-        function __construct($base,$id,$fname,$lname,$sex,$type,$mail,$marital,$phone,$btd,$psdo,$pswd)
+        function __construct()
         {
-            $this->bdd=$base;
-            $this->idUser=$id;
-            $this->Fname=htmlspecialchars($fname);
-            $this->Lname=htmlspecialchars($lname);
-            $this->Sexe=$sex;
-            $this->Type=$type;
-            $this->Phone=$phone;
-            $this->birthday=$btd;
-            $this->email=$mail;
-            $this->maretal=$marital;
-            $this->Pseudo=$psdo;
-            $this->Passwd=md5($pswd);
+            $this->bdd=DB::getInstance();            
         }
-        // function __construct($base)
-        // {
-        //     $this->bdd=$base;
-        // }
-        function connexion(){
-            $req="SELECT * FROM users us JOIN employee em ON us.idemployee=em.idemployee  WHERE (em.email=:pseudo OR us.username=:pseudo) AND us.passwd=:pwd";
+       
+        function connexion($data=[]){
+            $sql="SELECT * FROM users us JOIN employee em ON us.idemployee=em.idemployee  WHERE (em.email=? OR us.username=?) AND us.passwd=?";
             try{
-                $q=$this->bdd->prepare($req);
-                $q->bindParam(":pseudo",$this->Pseudo);
-                $q->bindParam(":pwd",$this->Passwd);
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $res=$this->bdd->query($sql,$data);  
+                if($res->result())  {
+                    return json_encode($res->result());
+                }            
+                 return false;
             }catch(Exception $ex){
-                echo "error_employee connect=>".$ex->getMessage();
+                 return ["Exception"=>$ex->getMessage()];
             }            
         }
         function displayEmployees($key=null,$marital=null,$depart=null,$serv=null,$child=null){

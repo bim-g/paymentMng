@@ -37,6 +37,14 @@ app.service("initApp",function($http,$window,$location){
             }
         },errorServer)
     };
+    this.gestAgents=function(cb){
+        $http({
+            method:"GET",
+            url:link          
+        }).then(function(response){
+            cb(response.data);
+        },errorServer);
+    };    
     this.searchAgent=function(num,cb){
         $http({
             method:"GET",
@@ -47,19 +55,15 @@ app.service("initApp",function($http,$window,$location){
             }            
         }).then(function(response){
             cb(response.data);
-        },errorServer)
+        },errorServer);
     };
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url:link+"user.php",
-            params:{
-                userId:id,
-                agent:"getDetaillAgent"
-            }            
-        }).then(function(response){
+            url: `${link}/${id}/detail`,                       
+        }).then(function(response){            
             cb(response.data); 
-        },errorServer)
+        },errorServer);
     };
 
     // 

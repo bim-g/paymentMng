@@ -242,9 +242,11 @@ app.controller("employeeListCtrl",function($scope,initApp){
             }
         }
     });
-	$scope.$emit("allAgent");
-    initApp.searchAgent("",function(r){
+    $scope.$emit("allAgent");
+    //get list of all employee
+    initApp.gestAgents(function (r) {
         if(angular.isObject(r) && !angular.isUndefined(r)){
+            console.log(r);
             $scope.employees=r;
         }else{            
             $scope.$emit('danger',{msg:r});
@@ -288,22 +290,26 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
             }
         });
     };
+    // get detail information about the selected agent/employee
     $scope.searchAgent=function(){
         if(Number($scope.idAgent)){
             initApp.getDetaillAgent($scope.idAgent,function(r){
                 if(angular.isObject(r) && !angular.isUndefined(r)){
 					var employee=r[0];
-					var famill=r[1];
+                    var famill=[];
+                    if(r[1]){
+                        famill=r[1];                        
+                    }                    
                     $scope.rollnumber=$scope.idAgent;
-                    $scope.empname=angular.uppercase(employee[0].Fname+" "+employee[0].Lname);
-                    $scope.empsexe=employee[0].sexe;
-                    $scope.empphone=employee[0].phone;
-                    $scope.empemail=employee[0].email;
-                    $scope.empbirth=employee[0].birthday;
-                    $scope.empmaretal=employee[0].maretalStatus;
-                    $scope.Level=employee[0].levelGrade;
-                    $scope.services=employee[0].servicesWork;
-                    $scope.totalSalary=employee[0].salary;					
+                    $scope.empname=angular.uppercase(employee.Fname+" "+employee.Lname);
+                    $scope.empsexe=employee.sexe;
+                    $scope.empphone=employee.phone;
+                    $scope.empemail=employee.email;
+                    $scope.empbirth=employee.birthday;
+                    $scope.empmaretal=employee.maretalStatus;
+                    $scope.Level=employee.levelGrade;
+                    $scope.services=employee.servicesWork;
+                    $scope.totalSalary=employee.salary;					
 					$scope.familly=famill;
 					$scope.nbenfant=famill.length;
 				}

@@ -1,6 +1,6 @@
 <?php
-    $route->get('/users',function(){
-        Response::send(md5('123456'));
-    });    
+    $route->get('/users', "userCtrl#getAllEmployee");    
+    $route->get('/users/:id/detail', "userCtrl#getEmployeDetail");
     $route->post('/users/login', "userCtrl#connexion");
-?>
+
+    ?>

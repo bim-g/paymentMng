@@ -39,6 +39,19 @@ class userCtrl
             Response::send("invalide data operation", 400);
         }
     }
+    
+    private function getEmployee($id=null){
+        return $this->user->getEmployee($id);
+        
+    }
+    function getAllEmployee(){
+        $response=$this->getEmployee();
+        Response::send($response);
+    }
+    function getEmployeDetail($id){
+        $response = $this->getEmployee($id);
+        Response::send($response);
+    }
     function register(){
         if(Input::exists()){
             $this->validate->check($_POST,[]);

@@ -1,16 +1,6 @@
 <?php
     class users{
-        private $idUser;
-        private $Fname;
-        private $Lname;
-        private $Sexe;
-        private $Type;
-        private $Phone;
-        private $email;
-        private $maretal;
-        private $birthday;
-        private $Pseudo;
-        private $Passwd;
+        
         private $bdd;
 
         function __construct()
@@ -23,7 +13,10 @@
             try{
                 $res=$this->bdd->query($sql,$data);  
                 if($res->result())  {
-                    return json_encode($res->result());
+                    $result=json_encode($res->result());   
+                    $result=json_decode($result);             
+                    array_push($result, ["token" => Token::generate()]);
+                    return json_encode($result);
                 }            
                  return false;
             }catch(Exception $ex){

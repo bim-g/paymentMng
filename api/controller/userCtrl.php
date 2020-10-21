@@ -28,10 +28,8 @@ class userCtrl
                 $data = [$username,$username, $password];                
                 $response=$this->user->connexion($data);
                 if(!$response){
-                    Response::send("echec de connexion :(",400);
-                }else{
-                    $token=Token::generate();
-                    array_push($response,["token"=>$token]);
+                    Response::send(["message"=>"echec de connexion :("],400);
+                }else{                    
                     Response::send($response);
                 }                
             } else {

@@ -1,5 +1,5 @@
 app.service("initApp",function($http,$window,$location){
-    var link="http://localhost/payroll_ulk/api/request/";
+    var link="http://localhost/payroll_ulk/api/users";
     
     this.initilize=function(){
         var url="/login";
@@ -12,10 +12,11 @@ app.service("initApp",function($http,$window,$location){
         var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
         $http({
             method:"POST",
-            url:link+"user.php",
+            url:link,
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
+            console.log(response)
             var res=response.data[0];
             if(angular.isObject(res) && !angular.isUndefined(res)) {         
                 $window.sessionStorage.setItem("userId",res.idemployee);

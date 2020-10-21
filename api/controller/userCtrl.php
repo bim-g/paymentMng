@@ -30,6 +30,8 @@ class userCtrl
                 if(!$response){
                     Response::send("echec de connexion :(",400);
                 }else{
+                    $token=Token::generate();
+                    array_push($response,["token"=>$token]);
                     Response::send($response);
                 }                
             } else {
@@ -37,6 +39,13 @@ class userCtrl
             }
         } else {
             Response::send("invalide data operation", 400);
+        }
+    }
+    function register(){
+        if(Input::exists()){
+            $this->validate->check($_POST,[]);
+        }else{
+            Response::send("Operation echouez",400);
         }
     }
 }

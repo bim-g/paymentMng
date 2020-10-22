@@ -278,7 +278,7 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
             }
         }
     });
-	$scope.rollnumber; 
+	// $scope.rollnumber; 
 	$scope.$emit("detailAgent");
     $scope.getTransaction=function(iduser){
         initApp.getTransactions(iduser,function(r){
@@ -328,26 +328,7 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
             $scope.searchAgent();
         }        
     }
-    $scope.studentpayed=function(){
-        $scope.payment={
-            bankproof:$scope.finBank,
-            amount:$scope.finamount,
-            idtypeFess:$scope.finTypes,
-            idstudent:$scope.rearch.idstudent,
-            iduser:$window.sessionStorage.userId
-        };
-        initApp.studentPay($scope.payment,function(r){
-            if(r=="success pay"){
-                $scope.finBank=null;
-                $scope.finamount=null;
-                $scope.finTypes=null;
-                $scope.searchStudent();
-            }
-            else{
-                $scope.$emit('danger',{msg:r});
-            }
-        });
-    };
+   
 });
 app.controller("congigCtrl",function($scope,initApp){
     $scope.$on("yesConfirm",function(e,data){

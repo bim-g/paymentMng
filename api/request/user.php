@@ -17,12 +17,7 @@
     $psdo=NULL;
     $pswd=NULL;
     
-    if(isset($_POST['connect'])){
-        $psdo=$_POST['username'];
-        $pswd=$_POST['password'];
-        $user = new users($connexion,$id,$fname,$lname,$sex,$type,$mail,$marital,$phone,$birth,$psdo,$pswd);
-        $user->connexion();
-    } 
+    
     if(isset($_POST['user'])){
         switch($_POST['user']){
             case 'adduser':
@@ -49,11 +44,11 @@
             case 'getDetaillAgent':
             $id=$_GET['userId'];
             $user = new users($connexion,$id,$fname,$lname,$sex,$type,$mail,$marital,$phone,$birth,$psdo,$pswd);
-            $user->getDetaillAgent();
+            $user->getDetaillAgent($id);
             break;
             case 'getTransactions':
             $user = new users($connexion,$id,$fname,$lname,$sex,$type,$mail,$marital,$phone,$birth,$psdo,$pswd);
-            $user->gettypeOfFees();
+            // $user->gettypeOfFees();
             break;
         }        
     }   

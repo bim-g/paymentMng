@@ -1,9 +1,6 @@
 <?php
-    $route->get('/users',function(){
-        Response::send("welcom to pay roll api!");
-    });
-    // $route->post('/users',function(){
-    //     Response::send($_POST);
-    // });
-    $route->post('/users', "userCtrl#connexion");
-?>
+    $route->get('/users', "userCtrl#getAllEmployee");    
+    $route->get('/users/:id/detail', "userCtrl#getEmployeDetail");
+    $route->post('/users/login', "userCtrl#connexion");
+
+    ?>

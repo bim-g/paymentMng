@@ -28,8 +28,8 @@ class userCtrl
                 $data = [$username,$username, $password];                
                 $response=$this->user->connexion($data);
                 if(!$response){
-                    Response::send("echec de connexion :(",400);
-                }else{
+                    Response::send(["message"=>"echec de connexion :("],400);
+                }else{                    
                     Response::send($response);
                 }                
             } else {
@@ -37,6 +37,26 @@ class userCtrl
             }
         } else {
             Response::send("invalide data operation", 400);
+        }
+    }
+    
+    private function getEmployee($id=null){
+        return $this->user->getEmployee($id);
+        
+    }
+    function getAllEmployee(){
+        $response=$this->getEmployee();
+        Response::send($response);
+    }
+    function getEmployeDetail($id){
+        $response = $this->getEmployee($id);
+        Response::send($response);
+    }
+    function register(){
+        if(Input::exists()){
+            $this->validate->check($_POST,[]);
+        }else{
+            Response::send("Operation echouez",400);
         }
     }
 }

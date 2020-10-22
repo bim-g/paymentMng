@@ -12,12 +12,12 @@ app.service("initApp",function($http,$window,$location){
         var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
         $http({
             method:"POST",
-            url:link,
+            url:link+"/login",
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
-            console.log(response)
             var res=response.data[0];
+            var token=response.data[1].token;
             if(angular.isObject(res) && !angular.isUndefined(res)) {         
                 $window.sessionStorage.setItem("userId",res.idemployee);
                 $window.sessionStorage.setItem("userFName",res.Fname);
@@ -29,13 +29,22 @@ app.service("initApp",function($http,$window,$location){
                 $window.sessionStorage.setItem("userPhone",res.phone);
                 $window.sessionStorage.setItem("userSexe",res.sexe);
                 $window.sessionStorage.setItem("maretalSatus",res.maretalStatus);
+                $window.sessionStorage.setItem("token",token);
                 $window.sessionStorage.setItem("menu",true);
-                cb("connect")
+                cb("connect");
             }else{
                 cb(res);
             }
         },errorServer)
     };
+    this.gestAgents=function(cb){
+        $http({
+            method:"GET",
+            url:link          
+        }).then(function(response){
+            cb(response.data);
+        },errorServer);
+    };    
     this.searchAgent=function(num,cb){
         $http({
             method:"GET",
@@ -46,19 +55,15 @@ app.service("initApp",function($http,$window,$location){
             }            
         }).then(function(response){
             cb(response.data);
-        },errorServer)
+        },errorServer);
     };
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url:link+"user.php",
-            params:{
-                userId:id,
-                agent:"getDetaillAgent"
-            }            
-        }).then(function(response){
+            url: `${link}/${id}/detail`,                       
+        }).then(function(response){            
             cb(response.data); 
-        },errorServer)
+        },errorServer);
     };
 
     // 

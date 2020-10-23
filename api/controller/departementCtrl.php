@@ -28,5 +28,22 @@
                 Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
             }
         }
-        
+
+        function getGrades(){
+            if (Token::check(Input::header('token'))) {
+                $result = $this->departement->getGrade();
+                Response::send($result);
+            } else {
+                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+            }
+        } 
+        function getSalary(){
+            if (Token::check(Input::header('token'))) {
+                $result = $this->departement->getConfigSalary();
+                Response::send($result);
+            } else {
+                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+            }
+        } 
+
     }

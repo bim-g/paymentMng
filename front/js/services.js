@@ -153,10 +153,10 @@ app.service("initApp",function($http,$window,$location){
     this.getConfigSalary=function(cb){
         $http({
             method:"GET",
-            url:`${departemantLink}/grade`,
-            params:{                
-                config:"getConfigSalary"
-            }            
+            url: `${departemantLink}/salary`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer);

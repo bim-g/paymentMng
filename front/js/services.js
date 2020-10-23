@@ -40,7 +40,8 @@ app.service("initApp",function($http,$window,$location){
     this.gestAgents=function(cb){
         $http({
             method:"GET",
-            url:link          
+            url:link ,
+            headers:{'token':$window.sessionStorage.token}         
         }).then(function(response){
             cb(response.data);
         },errorServer);
@@ -49,10 +50,7 @@ app.service("initApp",function($http,$window,$location){
         $http({
             method:"GET",
             url:link+"user.php",
-            params:{
-                agent:"getAgent",
-                keyword:num
-            }            
+            headers:{'token':$window.sessionStorage.token}          
         }).then(function(response){
             cb(response.data);
         },errorServer);
@@ -60,12 +58,12 @@ app.service("initApp",function($http,$window,$location){
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url: `${link}/${id}/detail`,                       
+            url: `${link}/${id}/detail`, 
+            headers:{'token':$window.sessionStorage.token} 
         }).then(function(response){            
             cb(response.data); 
         },errorServer);
     };
-
     // 
     this.addDepartement=function(departName,cb){
         var param="config=addDepartement&Namedepart="+departName;

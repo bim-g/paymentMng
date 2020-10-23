@@ -45,12 +45,18 @@ class userCtrl
         
     }
     function getAllEmployee(){
+        if (Token::check(Input::header('token'))) {
         $response=$this->getEmployee();
         Response::send($response);
+        }
+        Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
     }
     function getEmployeDetail($id){
-        $response = $this->getEmployee($id);
-        Response::send($response);
+        if(Token::check(Input::header('token'))){
+            $response = $this->getEmployee($id);
+            Response::send($response);
+        }
+        Response::send(["status"=>400,"message"=>"vous n'avez pas assez d'autorization pour effectuez cette operation"]);
     }
     function register(){
         if(Input::exists()){

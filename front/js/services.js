@@ -1,6 +1,7 @@
 app.service("initApp",function($http,$window,$location){
-    var link="http://localhost/payroll_ulk/api/users";
-    
+    let link="http://localhost/payroll_ulk/api";
+    let usersLink=`${link}/users`;
+    let departemantLink=`${link}/departement`;
     this.initilize=function(){
         var url="/login";
         if($window.sessionStorage.userPseudo && $window.sessionStorage.userEmail){
@@ -12,7 +13,7 @@ app.service("initApp",function($http,$window,$location){
         var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
         $http({
             method:"POST",
-            url:link+"/login",
+            url: `${usersLink}/login`,
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
@@ -40,7 +41,7 @@ app.service("initApp",function($http,$window,$location){
     this.gestAgents=function(cb){
         $http({
             method:"GET",
-            url:link ,
+            url:usersLink ,
             headers:{'token':$window.sessionStorage.token}         
         }).then(function(response){
             cb(response.data);
@@ -58,7 +59,7 @@ app.service("initApp",function($http,$window,$location){
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url: `${link}/${id}/detail`, 
+            url: `${usersLink}/${id}/detail`,
             headers:{'token':$window.sessionStorage.token} 
         }).then(function(response){            
             cb(response.data); 

@@ -147,14 +147,13 @@ app.service("initApp",function($http,$window,$location){
                 'token': $window.sessionStorage.token
             }
         }).then(function(response){
-            console.log(response)
             cb(response.data); 
         },errorServer);
     };
     this.getConfigSalary=function(cb){
         $http({
             method:"GET",
-            url:link+"myconfig.php",
+            url:`${departemantLink}/grade`,
             params:{                
                 config:"getConfigSalary"
             }            

@@ -6,7 +6,20 @@
             $this->bdd=DB::getInstance();
         }
 
-        
+        function getServices($id=null){            
+            $where=[];
+            $table= "services JOIN departement ON services.iddepart=departement.iddepart";
+            if((int)$id>0){
+                $where=["iddepart","=",$id];                
+            }           
+            try{
+                $res=$this->bdd->get($table,$where);  
+                
+                return json_encode($res->result());
+            }catch(Exception $ex){
+                return ["Exception"=>$ex->getMessage()];
+            } 
+        }
         function getDepartments($id=null){             
             try{
                 $where=[];

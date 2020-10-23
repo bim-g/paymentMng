@@ -1,7 +1,7 @@
 app.service("initApp",function($http,$window,$location){
     let link="http://localhost/payroll_ulk/api";
     let usersLink=`${link}/users`;
-    let departemantLink=`${link}/departement`;
+    let departemantLink = `${link}/departements`;
     this.initilize=function(){
         var url="/login";
         if($window.sessionStorage.userPseudo && $window.sessionStorage.userEmail){
@@ -70,9 +70,11 @@ app.service("initApp",function($http,$window,$location){
         var param="config=addDepartement&Namedepart="+departName;
         $http({
             method:"POST",
-            url:link+"myconfig.php",
+            url:departemantLink+"myconfig.php",
             data:param,
-            headers:{'Content-Type':'application/x-www-form-urlencoded'}
+            headers:{'Content-Type':'application/x-www-form-urlencoded',
+                    'token':$window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -83,7 +85,10 @@ app.service("initApp",function($http,$window,$location){
             method:"POST",
             url:link+"myconfig.php",
             data:param,
-            headers:{'Content-Type':'application/x-www-form-urlencoded'}
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -91,10 +96,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDepartment=function(cb){
         $http({
             method:"GET",
-            url:link+"myconfig.php",
-            params:{                
-                config:"getDepartment"
-            }            
+            url:departemantLink,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -106,7 +111,7 @@ app.service("initApp",function($http,$window,$location){
             params:{                
                 config:"getGrade"
             }            
-        }).then(function(response){
+        }).then(function(response){            
             cb(response.data); 
         },errorServer)
     };
@@ -137,12 +142,12 @@ app.service("initApp",function($http,$window,$location){
     this.getServices=function(src,cb){
         $http({
             method:"GET",
-            url:link+"myconfig.php",
-            params:{                
-                config:"getServices",
-                mysrc:src
-            }            
+            url:`${departemantLink}/services`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
+            console.log(response)
             cb(response.data); 
         },errorServer);
     };

@@ -1,55 +1,30 @@
 <?php
     class configurations{
         private $bdd;
-        private $idServ;
-        private $iddep;
-        private $nameServ;
-        function __construct($base,$id,$name)
+        function __construct()
         {
-            $this->bdd=$base;
-            $this->idServ=$id;
-            $this->nameServ=$name;
+            $this->bdd=DB::getInstance();
         }
 
-        function getServices($src){            
-            $req=null;
-            if($src!=null && (int)$src){
-                $req.=" SELECT * FROM services JOIN departement ON services.iddepart=departement.iddepart WHERE iddepart=:idDep";
-            }elseif($src!=null && $src="services"){
-                $req=" SELECT * FROM services JOIN departement ON services.iddepart=departement.iddepart WHERE services.iddepart=departement.iddepart";
-            }            
+        
+        function getDepartments($id=null){             
             try{
-                $q=$this->bdd->prepare($req);  
-                if($src!=null && (int)$src){
-                    $q->bindParam(":idDep",$src);
-                }                         
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $where=[];
+                if((int)$id>0){
+                    $where=["iddepart","=",$id];
+                }
+                $res=$this->bdd->get("departement",$where);
+                return json_encode($res->result());
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return "Exception=>".$ex->getMessage();
             } 
         }
-        function getDepartment(){            
-            $req="SELECT * FROM departement";            
+        function getGrade(){          
             try{
-                $q=$this->bdd->prepare($req);                            
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $res=$this->bdd->query("grade",[],["idgrade","gradeName"]);
+                return json_encode($res->result());
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
-            } 
-        }
-        function getGrade(){
-            $req="SELECT idgrade,gradeName FROM grade";            
-            try{
-                $q=$this->bdd->prepare($req);                            
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
-            }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return ["Exception"=>$ex->getMessage()];
             } 
         }
         function getConfigSalary(){            

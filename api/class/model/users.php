@@ -8,7 +8,7 @@
             $this->bdd=DB::getInstance();            
         }
        
-        function connexion($data=[]){
+        function connexion(array $data=[]){
             $sql="SELECT * FROM users us JOIN employee em ON us.idemployee=em.idemployee  WHERE (em.email=? OR us.username=?) AND us.passwd=?";
             try{
                 $res=$this->bdd->query($sql,$data);  
@@ -23,7 +23,7 @@
                  return ["Exception"=>$ex->getMessage()];
             }            
         }
-        function getEmployee($userid=null,$marital=null,$depart=null,$serv=null,$child=null){
+        function getEmployee(int $userid=null,$marital=null,int $depart=null,int $serv=null,int $child=null){
             $iddepart=$depart;
             $iddservice=$serv;
             // $iddchild=$this->getNumChild($child);
@@ -92,7 +92,7 @@
                 echo "error_get departement=>".$ex->getMessage();
             }            
         }
-        function getDetaillAgent($id=false){
+        function getDetaillAgent(int $id=null){
             $employee=array();
             $req="SELECT emp.idemployee, emp.Fname, emp.Lname, emp.birthday, emp.sexe, emp.email, emp.phone,
                     emp.maretalStatus, serv.serviceName,grd.gradeName,grd.netsalary,grd.childprime                    
@@ -114,9 +114,9 @@
                     $childprime= (int)$res['childprime'];
                     $totalChild=$this->getTotalChild($res['idemployee'],null);
                     $maretalStatus= $this->getPrimeEmployee($res['maretalStatus']);
-                $salary=$netSalaty+($childprime*$totalChild)+$maretalStatus;
-                $empdepend=$this->getTotalChild($res['idemployee'],"all");
-                    array_push($employee,array(
+                    $salary=$netSalaty+($childprime*$totalChild)+$maretalStatus;
+                    $empdepend=$this->getTotalChild($res['idemployee'],"all");
+                    array_push($employee,[
                         "idemployee"=>$res['idemployee'],
                         "Fname"=>$res['Fname'],
                         "Lname"=>$res['Lname'],
@@ -128,28 +128,26 @@
                         "servicesWork"=>$res['serviceName'],
                         "levelGrade"=>$res['gradeName'],
                         "salary"=>$salary
-                    ));
+                    ]);
                 }
                 echo json_encode(array($employee,$empdepend));
             }catch(Exception $ex){
-                echo "error_get typeofFees=>".$ex->getMessage();
+                return ["error_get typeofFees=>".$ex->getMessage()];
             }            
         }
-
-        private function getPrimeEmployee($typeEmp){            
+        // 
+        private function getPrimeEmployee(int $typeEmp){            
             try{
-                $q=$this->bdd->get("employeeprime",["typeprime","=", $typeEmp]);   
-                if($q->result()){
-                    $res=json_encode($q->result());
-                    $res=json_decode($res);                    
-                    return (int)$res['mountPrime'];
+                $req=$this->bdd->get("employeeprime")->where(["typeprime","=", $typeEmp])->result();   
+                if($req){                                       
+                    return (int)$req->mountPrime;
                 }return [];           
             }catch(Exception $ex){
                 return ["error_getPrimeEMployee MaratalStatus"=>$ex->getMessage()];
             } 
         }
-
-        private function getTotalChild($idEmp,$type=null){
+        // 
+        private function getTotalChild(int $idEmp,$type=null){
             $sql= "SELECT `dependName`, `dependStatus`, `birthday`, `sexe` FROM empDependancy WHERE idemployee=? ";
             if($type==null){
                 $sql="SELECT iddep FROM empDependancy WHERE idemployee=? AND dependStatus='child'";
@@ -181,29 +179,32 @@
                 return ["error_getTotal childEmployee"=>$ex->getMessage()];
             }
         }
-
-        function adduser($idServ,$idDep){
-            $req="INSERT INTO FROM employee (0, `Fname`, `Lname`, `birthday`, `sexe`, `email`, `phone`, `maretalStatus`, `datecreate`) VALUES (:Fname, :Lname, :birthday, :sexe, :email, :phone, :maretalStatus, CURRENT_TIMESTAMP))";
-            $setgrade="INSERT INTO `workonas` (`id`, `idemployee`, `idservice`, `idgrade`, `datecreate`) VALUES 
-            (0, :iduser, :idServ, :idgrade, CURRENT_TIMESTAMP)";
+        // 
+        function adduser($employee_field,$workon_field){
+            // $req="INSERT INTO FROM employee (0, `Fname`, `Lname`, `birthday`, `sexe`, `email`, `phone`, `maretalStatus`, `datecreate`) VALUES (:Fname, :Lname, :birthday, :sexe, :email, :phone, :maretalStatus, CURRENT_TIMESTAMP))";
+            // $setgrade="INSERT INTO `workonas` (`id`, `idemployee`, `idservice`, `idgrade`, `datecreate`) VALUES 
+            // (0, :iduser, :idServ, :idgrade, CURRENT_TIMESTAMP)";
             try{
                
-                $q=$this->bdd->prepare($req);  
-                $q->bindParam(":Fname",$this->Fname) ;                         
-                $q->bindParam(":Lname,",$this->Lname) ;                         
-                $q->bindParam(":birthday, ",$this->birthday) ;                         
-                $q->bindParam(":sexe, ",$this->Sexe) ;                         
-                $q->bindParam(":email, ",$this->email) ;                         
-                $q->bindParam(":phone",$this->Phone) ;                         
-                $q->bindParam(":maretalStatus",$this->maretal);                   
-                $q->execute();
-                $res=$q->fetch();
-
-                return (int)$res['mountPrime'];
+                $this->bdd->insert("employee", $employee_field)->result();  
+                if($this->bdd->error()){
+                    throw new Exception("$this->bdd->error()");
+                }
+                $userid=$this->bdd->lastId();
+                array_push($workon_field,["idemployee"=>$userid]);
+                try{
+                    $this->bdd->insert("workonas", $workon_field)->result();
+                    if ($this->bdd->error()) {
+                        throw new Exception("$this->bdd->error()");
+                    }
+                    return $userid; 
+                }catch(Exception $ex){
+                    return ["error_getPrimeEMployee MaratalStatus=>" . $ex->getMessage()];
+                }
+                
             }catch(Exception $ex){
-                echo "error_getPrimeEMployee MaratalStatus=>".$ex->getMessage();
+                return ["error_getPrimeEMployee MaratalStatus=>".$ex->getMessage()];
             } 
-        }
-        
+        }        
     }
 ?>

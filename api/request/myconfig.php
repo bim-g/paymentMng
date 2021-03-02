@@ -31,7 +31,7 @@
             break;
             case 'getDepartment':
             $conf = new configurations($connexion,$id,$name);
-            $conf->getDepartment();
+            // $conf->getDepartment();
             break;
             case 'getGrade':
             $conf = new configurations($connexion,$id,$name);

@@ -1,16 +1,6 @@
 <?php
     class users{
-        private $idUser;
-        private $Fname;
-        private $Lname;
-        private $Sexe;
-        private $Type;
-        private $Phone;
-        private $email;
-        private $maretal;
-        private $birthday;
-        private $Pseudo;
-        private $Passwd;
+        
         private $bdd;
 
         function __construct()
@@ -23,14 +13,17 @@
             try{
                 $res=$this->bdd->query($sql,$data);  
                 if($res->result())  {
-                    return json_encode($res->result());
+                    $result=json_encode($res->result());   
+                    $result=json_decode($result);             
+                    array_push($result, ["token" => Token::generate()]);
+                    return json_encode($result);
                 }            
                  return false;
             }catch(Exception $ex){
                  return ["Exception"=>$ex->getMessage()];
             }            
         }
-        function displayEmployees($key=null,$marital=null,$depart=null,$serv=null,$child=null){
+        function getEmployee($userid=null,$marital=null,$depart=null,$serv=null,$child=null){
             $iddepart=$depart;
             $iddservice=$serv;
             // $iddchild=$this->getNumChild($child);
@@ -49,54 +42,41 @@
             elseif($serv!=null){
                 $req.="JOIN services serv ON emp.idemployee=serv.idservice";
             }
-            //             
+            //      
+            $where=[];       
             if($marital!=null || !$depart==null || $serv!=null|| $child!=null){
                 $req.="WHERE";
                 if($marital!=null){
-                    $req.="emp.matitalStatus=:marital AND ";
+                    $req.="emp.matitalStatus=? AND ";
+                    $where = [$marital];
                 }
                 if($depart!=null){
                     if($serv==null){
                         $req.="dep.iddepart=:idDep";
+                    array_merge($where , $depart);
                     }else{
                         $req.="serv.idservice=:idServ";
                     }
                 }
                 elseif($serv!=null){
                     if($marital!=null){
-                        $req.="serv.idservice=:idServ ";
+                        $req.="serv.idservice=? ";
+                        array_merge($where, $serv);
                     }
                 }
                 // if($child!=null){
                 //     $req.="serv.idservice=:idServ";
                 // }
             }
-            if($key!=null){
-                $req.=" WHERE emp.idemployee=:mykey OR emp.email=:mykey OR emp.phone LIKE '".$key."%'";
+            if($userid!=null){
+                $req.=" WHERE emp.idemployee=? OR emp.email=? OR emp.phone LIKE '". $userid."%'";
+                $where = [$userid,$userid];
             }
-            $req.="ORDER BY emp.idemployee DESC";
-            
+            $req.="ORDER BY emp.idemployee DESC";               
+                
             try{
-                $q=$this->bdd->prepare($req);
-                if($key!=null ){
-                    $q->bindParam(":mykey",$key);
-                }
-                if($marital!=null ){
-                    $q->bindParam(":marital",$$marital);
-                }
-                if(!$depart==null ){
-                    $q->bindParam(":idDep",$depart);
-                }
-                if($serv!=null){
-                    $q->bindParam(":idServ",$serv);
-                }
-                // if($child!=null){
-                //     $q->bindParam($child);
-                // }
-                              
-                $q->execute();
-                $res=$q->fetchAll();                
-                echo json_encode($res);
+                $q=$this->bdd->query($req,$where);                
+                return json_encode($q->result()); 
             }catch(Exception $ex){
                 echo "error_getAgent=>".$ex->getMessage();
             }            
@@ -112,7 +92,7 @@
                 echo "error_get departement=>".$ex->getMessage();
             }            
         }
-        function getDetaillAgent($uniq=false){
+        function getDetaillAgent($id=false){
             $employee=array();
             $req="SELECT emp.idemployee, emp.Fname, emp.Lname, emp.birthday, emp.sexe, emp.email, emp.phone,
                     emp.maretalStatus, serv.serviceName,grd.gradeName,grd.netsalary,grd.childprime                    
@@ -122,13 +102,19 @@
                     LEFT JOIN grade grd ON work.idgrade=grd.idgrade
                     LEFT JOIN primeongrade prOn ON grd.idgrade=prOn.idgrade
                     LEFT JOIN employeeprime empr ON prOn.idprime=empr.idprime
-                    WHERE emp.idemployee=:idemp";            
+                    WHERE emp.idemployee=?";            
             try{
-                $q=$this->bdd->prepare($req); 
-                $q->bindParam(":idemp",$this->idUser);                           
-                $q->execute();
-                while($res=$q->fetch()){
-                $salary=(int)$res['netsalary']+((int)$res['childprime']*$this->getTotalChild($res['idemployee'],null))+$this->getPrimeEmployee($res['maretalStatus']);
+                $where=[$id];
+
+                $q=$this->bdd->query($req,$where); 
+                $res=json_encode($q->result());
+                $res=json_decode($res);
+                while($res){
+                    $netSalaty= (int)$res['netsalary'];
+                    $childprime= (int)$res['childprime'];
+                    $totalChild=$this->getTotalChild($res['idemployee'],null);
+                    $maretalStatus= $this->getPrimeEmployee($res['maretalStatus']);
+                $salary=$netSalaty+($childprime*$totalChild)+$maretalStatus;
                 $empdepend=$this->getTotalChild($res['idemployee'],"all");
                     array_push($employee,array(
                         "idemployee"=>$res['idemployee'],
@@ -150,37 +136,37 @@
             }            
         }
 
-        private function getPrimeEmployee($typeEmp){
-            $req="SELECT mountPrime FROM employeeprime WHERE typeprime=:typestatus";
+        private function getPrimeEmployee($typeEmp){            
             try{
-                $q=$this->bdd->prepare($req);  
-                $q->bindParam(":typestatus",$typeEmp) ;                         
-                $q->execute();
-                $res=$q->fetch();
-
-                return (int)$res['mountPrime'];
+                $q=$this->bdd->get("employeeprime",["typeprime","=", $typeEmp]);   
+                if($q->result()){
+                    $res=json_encode($q->result());
+                    $res=json_decode($res);                    
+                    return (int)$res['mountPrime'];
+                }return [];           
             }catch(Exception $ex){
-                echo "error_getPrimeEMployee MaratalStatus=>".$ex->getMessage();
+                return ["error_getPrimeEMployee MaratalStatus"=>$ex->getMessage()];
             } 
         }
 
         private function getTotalChild($idEmp,$type=null){
+            $sql= "SELECT `dependName`, `dependStatus`, `birthday`, `sexe` FROM empDependancy WHERE idemployee=? ";
             if($type==null){
-                $req="SELECT iddep FROM empDependancy WHERE idemployee=:idemp AND dependStatus='child'";
-            }else{
-                $req="SELECT `dependName`, `dependStatus`, `birthday`, `sexe` FROM empDependancy WHERE idemployee=:idemp ";
+                $sql="SELECT iddep FROM empDependancy WHERE idemployee=? AND dependStatus='child'";
             }
             try{
-                $q=$this->bdd->prepare($req);  
-                $q->bindParam(":idemp",$idEmp) ;                         
-                $q->execute();
+                $q=$this->bdd->query($sql,[$idEmp]);  
+                $res=json_encode($q->result());
+                $res=json_decode($res);
+                $result=[];
                 if($type==null){
-                    $res=count($q->fetchAll());
-                    $result=(int)$res;
+                    $len=count($res);
+                    $result=$res;
                 }
                 if($type!=null){
                     $depend=array();
-                    while($res=$q->fetch()){
+                    $len=count($res);
+                    for($i=0;$i<$len;$i++){
                         array_push($depend,array(
                             "depName"=>$res['dependName'],
                             "depRelat"=>$res['dependStatus'],
@@ -192,7 +178,7 @@
                 }
                 return $result;
             }catch(Exception $ex){
-                echo "error_getTotal childEmployee=>".$ex->getMessage();
+                return ["error_getTotal childEmployee"=>$ex->getMessage()];
             }
         }
 

@@ -1,94 +1,83 @@
 <?php
     class configurations{
         private $bdd;
-        private $idServ;
-        private $iddep;
-        private $nameServ;
-        function __construct($base,$id,$name)
+        function __construct()
         {
-            $this->bdd=$base;
-            $this->idServ=$id;
-            $this->nameServ=$name;
+            $this->bdd=DB::getInstance();
         }
 
-        function getServices($src){            
-            $req=null;
-            if($src!=null && (int)$src){
-                $req.=" SELECT * FROM services JOIN departement ON services.iddepart=departement.iddepart WHERE iddepart=:idDep";
-            }elseif($src!=null && $src="services"){
-                $req=" SELECT * FROM services JOIN departement ON services.iddepart=departement.iddepart WHERE services.iddepart=departement.iddepart";
-            }            
+        function getServices($id=null){            
+            $where=[];
+            $table= "services JOIN departement ON services.iddepart=departement.iddepart";
+            if((int)$id>0){
+                $where=["iddepart","=",$id];                
+            }           
             try{
-                $q=$this->bdd->prepare($req);  
-                if($src!=null && (int)$src){
-                    $q->bindParam(":idDep",$src);
-                }                         
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $res=$this->bdd->get($table,$where);  
+                
+                return json_encode($res->result());
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return ["Exception"=>$ex->getMessage()];
             } 
         }
-        function getDepartment(){            
-            $req="SELECT * FROM departement";            
+        function getDepartments($id=null){             
             try{
-                $q=$this->bdd->prepare($req);                            
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $where=[];
+                if((int)$id>0){
+                    $where=["iddepart","=",$id];
+                }
+                $res=$this->bdd->get("departement",$where);
+                return json_encode($res->result());
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return "Exception=>".$ex->getMessage();
             } 
         }
-        function getGrade(){
-            $req="SELECT idgrade,gradeName FROM grade";            
+        function getGrade(){          
             try{
-                $q=$this->bdd->prepare($req);                            
-                $q->execute();
-                $res=$q->fetchAll();
-                echo json_encode($res);
+                $res=$this->bdd->get("grade",[],["idgrade","gradeName"]);
+                return json_encode($res->result());
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return ["Exception"=>$ex->getMessage()];
             } 
         }
-        function getConfigSalary(){            
-            $req="SELECT `idgrade`, `gradeName`, `netsalary`, `childprime` FROM grade";            
+        function getConfigSalary(){                     
             try{
-                $q=$this->bdd->prepare($req);                            
-                $q->execute();
-                $confSal=array();
-                while($res=$q->fetch()){
-                    array_push($confSal,array(
-                        "idgrade"=>$res['idgrade'],
-                        "gradeName"=>$res['gradeName'],
-                        "netsalary"=>$res['netsalary'],
-                        "primePost"=>$this->getPimePost($res['idgrade']),
-                        "childprime"=>$res['childprime']
+                $q=$this->bdd->get("grade",[],["idgrade","gradeName","netsalary","childprime"]);                            
+                $res=json_encode($q->result());
+                $res=json_decode($res,true);
+                $confSalary=[];
+                foreach($res as $item){
+                    array_push($confSalary,array(
+                        "idgrade"=>$item['idgrade'],
+                        "gradeName"=>$item['gradeName'],
+                        "netsalary"=>$item['netsalary'],
+                        "primePost"=>$this->getPimePost($item['idgrade']),
+                        "childprime"=>$item['childprime']
                     ));
                 }
-                echo json_encode($confSal);
+                return json_encode($confSalary);
             }catch(Exception $ex){
-                echo "error_get departement=>".$ex->getMessage();
+                return ["Exception"=>$ex->getMessage()];
             } 
         }
 
-        private function getPimePost($src){
-            $req="SELECT typeprime,emp.mountprime FROM employeeprime emp JOIN primeongrade pri ON emp.idprime=pri.idprime WHERE pri.idgrade=:idgrade";            
+        private function getPimePost($idgrade){            
+            $table= "employeeprime emp JOIN primeongrade pri ON emp.idprime=pri.idprime";
+            $where=["pri.idgrade","=",(int)$idgrade];
             try{
-                $q=$this->bdd->prepare($req); 
-                $q->bindParam(":idgrade",$src);                         
-                $q->execute();
+                $q=$this->bdd->get($table,$where,["typeprime", "emp.mountprime"]);                                      
+                $res=json_encode($q->result());
+                $result=json_decode($res,true);                
                 $prime=array();
-                while($res=$q->fetch()){
+                foreach($result as $item){
                     array_push($prime,array(
-                        "typeprime"=>$res['typeprime'],
-                        "amountPrime"=>$res['mountprime']
+                        "typeprime"=>$item['typeprime'],
+                        "amountPrime"=>$item['mountprime']
                     ));
                 }
                 return $prime;
             }catch(Exception $ex){
-                echo "error_getPrime of a post=>".$ex->getMessage();
+                return ["Exception"=>$ex->getMessage()];
             }
         }
 

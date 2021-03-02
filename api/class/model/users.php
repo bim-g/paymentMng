@@ -8,7 +8,7 @@
             $this->bdd=DB::getInstance();            
         }
        
-        function connexion($data=[]){
+        function connexion(array $data=[]){
             $sql="SELECT * FROM users us JOIN employee em ON us.idemployee=em.idemployee  WHERE (em.email=? OR us.username=?) AND us.passwd=?";
             try{
                 $res=$this->bdd->query($sql,$data);  
@@ -23,7 +23,7 @@
                  return ["Exception"=>$ex->getMessage()];
             }            
         }
-        function getEmployee($userid=null,$marital=null,$depart=null,$serv=null,$child=null){
+        function getEmployee(int $userid=null,$marital=null,int $depart=null,int $serv=null,int $child=null){
             $iddepart=$depart;
             $iddservice=$serv;
             // $iddchild=$this->getNumChild($child);
@@ -92,7 +92,7 @@
                 echo "error_get departement=>".$ex->getMessage();
             }            
         }
-        function getDetaillAgent($id=false){
+        function getDetaillAgent(int $id=null){
             $employee=array();
             $req="SELECT emp.idemployee, emp.Fname, emp.Lname, emp.birthday, emp.sexe, emp.email, emp.phone,
                     emp.maretalStatus, serv.serviceName,grd.gradeName,grd.netsalary,grd.childprime                    
@@ -114,9 +114,9 @@
                     $childprime= (int)$res['childprime'];
                     $totalChild=$this->getTotalChild($res['idemployee'],null);
                     $maretalStatus= $this->getPrimeEmployee($res['maretalStatus']);
-                $salary=$netSalaty+($childprime*$totalChild)+$maretalStatus;
-                $empdepend=$this->getTotalChild($res['idemployee'],"all");
-                    array_push($employee,array(
+                    $salary=$netSalaty+($childprime*$totalChild)+$maretalStatus;
+                    $empdepend=$this->getTotalChild($res['idemployee'],"all");
+                    array_push($employee,[
                         "idemployee"=>$res['idemployee'],
                         "Fname"=>$res['Fname'],
                         "Lname"=>$res['Lname'],
@@ -128,15 +128,15 @@
                         "servicesWork"=>$res['serviceName'],
                         "levelGrade"=>$res['gradeName'],
                         "salary"=>$salary
-                    ));
+                    ]);
                 }
                 echo json_encode(array($employee,$empdepend));
             }catch(Exception $ex){
                 return ["error_get typeofFees=>".$ex->getMessage()];
             }            
         }
-
-        private function getPrimeEmployee($typeEmp){            
+        // 
+        private function getPrimeEmployee(int $typeEmp){            
             try{
                 $req=$this->bdd->get("employeeprime")->where(["typeprime","=", $typeEmp])->result();   
                 if($req){                                       
@@ -146,8 +146,8 @@
                 return ["error_getPrimeEMployee MaratalStatus"=>$ex->getMessage()];
             } 
         }
-
-        private function getTotalChild($idEmp,$type=null){
+        // 
+        private function getTotalChild(int $idEmp,$type=null){
             $sql= "SELECT `dependName`, `dependStatus`, `birthday`, `sexe` FROM empDependancy WHERE idemployee=? ";
             if($type==null){
                 $sql="SELECT iddep FROM empDependancy WHERE idemployee=? AND dependStatus='child'";

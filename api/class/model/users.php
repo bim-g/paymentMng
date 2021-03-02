@@ -179,7 +179,7 @@
                 return ["error_getTotal childEmployee"=>$ex->getMessage()];
             }
         }
-
+        // 
         function adduser($employee_field,$workon_field){
             // $req="INSERT INTO FROM employee (0, `Fname`, `Lname`, `birthday`, `sexe`, `email`, `phone`, `maretalStatus`, `datecreate`) VALUES (:Fname, :Lname, :birthday, :sexe, :email, :phone, :maretalStatus, CURRENT_TIMESTAMP))";
             // $setgrade="INSERT INTO `workonas` (`id`, `idemployee`, `idservice`, `idgrade`, `datecreate`) VALUES 
@@ -205,7 +205,6 @@
             }catch(Exception $ex){
                 return ["error_getPrimeEMployee MaratalStatus=>".$ex->getMessage()];
             } 
-        }
-        
+        }        
     }
 ?>

@@ -132,17 +132,15 @@
                 }
                 echo json_encode(array($employee,$empdepend));
             }catch(Exception $ex){
-                echo "error_get typeofFees=>".$ex->getMessage();
+                return ["error_get typeofFees=>".$ex->getMessage()];
             }            
         }
 
         private function getPrimeEmployee($typeEmp){            
             try{
-                $q=$this->bdd->get("employeeprime",["typeprime","=", $typeEmp]);   
-                if($q->result()){
-                    $res=json_encode($q->result());
-                    $res=json_decode($res);                    
-                    return (int)$res['mountPrime'];
+                $req=$this->bdd->get("employeeprime")->where(["typeprime","=", $typeEmp])->result();   
+                if($req){                                       
+                    return (int)$req->mountPrime;
                 }return [];           
             }catch(Exception $ex){
                 return ["error_getPrimeEMployee MaratalStatus"=>$ex->getMessage()];
@@ -182,26 +180,30 @@
             }
         }
 
-        function adduser($idServ,$idDep){
-            $req="INSERT INTO FROM employee (0, `Fname`, `Lname`, `birthday`, `sexe`, `email`, `phone`, `maretalStatus`, `datecreate`) VALUES (:Fname, :Lname, :birthday, :sexe, :email, :phone, :maretalStatus, CURRENT_TIMESTAMP))";
-            $setgrade="INSERT INTO `workonas` (`id`, `idemployee`, `idservice`, `idgrade`, `datecreate`) VALUES 
-            (0, :iduser, :idServ, :idgrade, CURRENT_TIMESTAMP)";
+        function adduser($employee_field,$workon_field){
+            // $req="INSERT INTO FROM employee (0, `Fname`, `Lname`, `birthday`, `sexe`, `email`, `phone`, `maretalStatus`, `datecreate`) VALUES (:Fname, :Lname, :birthday, :sexe, :email, :phone, :maretalStatus, CURRENT_TIMESTAMP))";
+            // $setgrade="INSERT INTO `workonas` (`id`, `idemployee`, `idservice`, `idgrade`, `datecreate`) VALUES 
+            // (0, :iduser, :idServ, :idgrade, CURRENT_TIMESTAMP)";
             try{
                
-                $q=$this->bdd->prepare($req);  
-                $q->bindParam(":Fname",$this->Fname) ;                         
-                $q->bindParam(":Lname,",$this->Lname) ;                         
-                $q->bindParam(":birthday, ",$this->birthday) ;                         
-                $q->bindParam(":sexe, ",$this->Sexe) ;                         
-                $q->bindParam(":email, ",$this->email) ;                         
-                $q->bindParam(":phone",$this->Phone) ;                         
-                $q->bindParam(":maretalStatus",$this->maretal);                   
-                $q->execute();
-                $res=$q->fetch();
-
-                return (int)$res['mountPrime'];
+                $this->bdd->insert("employee", $employee_field)->result();  
+                if($this->bdd->error()){
+                    throw new Exception("$this->bdd->error()");
+                }
+                $userid=$this->bdd->lastId();
+                array_push($workon_field,["idemployee"=>$userid]);
+                try{
+                    $this->bdd->insert("workonas", $workon_field)->result();
+                    if ($this->bdd->error()) {
+                        throw new Exception("$this->bdd->error()");
+                    }
+                    return $userid; 
+                }catch(Exception $ex){
+                    return ["error_getPrimeEMployee MaratalStatus=>" . $ex->getMessage()];
+                }
+                
             }catch(Exception $ex){
-                echo "error_getPrimeEMployee MaratalStatus=>".$ex->getMessage();
+                return ["error_getPrimeEMployee MaratalStatus=>".$ex->getMessage()];
             } 
         }
         

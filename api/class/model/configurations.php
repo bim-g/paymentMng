@@ -81,20 +81,15 @@
             }
         }
         // 
-        function addDepartement(){
-            // $req="INSERT INTO departement VALUES(0,:departName,CURRENT_TIMESTAMP)";            
+        function addDepartement(){      
             try{
                 $this->bdd->insert("departement")->field()->result();
                 if ($this->bdd->error()) {
                     throw new Exception($this->bdd->error());
                 }
-                // $q=$this->bdd->prepare($req); 
-                // $q->bindParam(":departName",$this->nameServ);                         
-                // $q->execute();
-                // echo "success depart";
                 return true;
             }catch(Exception $ex){
-                echo "error_getPrime of a post=>".$ex->getMessage();
+                return[ "error".$ex->getMessage()];
             }
         }
         // 

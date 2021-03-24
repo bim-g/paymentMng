@@ -1,5 +1,5 @@
 app.service("initApp",function($http,$window,$location){
-    let link="http://localhost/payroll_ulk/api";
+    let link="http://localhost/payroll/api";
     let usersLink=`${link}/users`;
     let departemantLink = `${link}/departements`;
     this.initilize=function(){
@@ -70,7 +70,7 @@ app.service("initApp",function($http,$window,$location){
         var param="config=addDepartement&Namedepart="+departName;
         $http({
             method:"POST",
-            url:departemantLink+"myconfig.php",
+            url:departemantLink+"/myconfig.php",
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded',
                     'token':$window.sessionStorage.token

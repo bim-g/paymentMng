@@ -2,7 +2,14 @@
 this is payment management web app develloped
 # FrondEnd
 in angularjs ,w3.css
-
+## route
+the route allow to access speciphic pages of the aaplucaion according to the configuration and your need.
+- `/`: this is the root of the aplication after login.
+- `/login`: this route allow to acces the login page;
+- `/addAgent`: this route help to create a new agent as admin;
+- `/detailEmployee`: this route allow to access detail of a selected employee;
+- `/listEmployee`:  this route help to get a list of all the employee;
+- `/config`: this route help to access the configuration pages af the aplication;
 # BackEnd
 php with #WEPESI library
 this library help design mvc web application in simple way of doing things.

@@ -2,6 +2,7 @@ app.service("initApp",function($http,$window,$location){
     let link="http://localhost/payroll/api";
     let usersLink=`${link}/users`;
     let departemantLink = `${link}/departements`;
+    let token = `?token=${$window.sessionStorage.token}`;
     this.initilize=function(){
         var url="/login";
         if($window.sessionStorage.userPseudo && $window.sessionStorage.userEmail){
@@ -97,10 +98,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDepartment=function(cb){
         $http({
             method:"GET",
-            url:departemantLink,
-            headers: {
-                'token': $window.sessionStorage.token
-            }
+            url: `${departemantLink}/?token=${$window.sessionStorage.token}`,
+            // headers: {
+            //     'token': $window.sessionStorage.token
+            // }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -143,10 +144,10 @@ app.service("initApp",function($http,$window,$location){
     this.getServices=function(src,cb){
         $http({
             method:"GET",
-            url:`${departemantLink}/services`,
-            headers: {
-                'token': $window.sessionStorage.token
-            }
+            url: `${departemantLink}/services${token}`,
+            // headers: {
+            //     'token': $window.sessionStorage.token
+            // }
         }).then(function(response){
             cb(response.data); 
         },errorServer);
@@ -154,11 +155,12 @@ app.service("initApp",function($http,$window,$location){
     this.getConfigSalary=function(cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/salary`,
-            headers: {
-                'token': $window.sessionStorage.token
-            }
+            url: `${departemantLink}/salary${token}`,
+            // headers: {
+            //     'token': $window.sessionStorage.token
+            // }
         }).then(function(response){
+            console.log("22222222222222222",response); 
             cb(response.data); 
         },errorServer);
     };

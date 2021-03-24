@@ -1,5 +1,8 @@
 <?php
-    $route->get('/departements',"departementCtrl#getAllDepartements");
-    $route->get('/departements/services',"departementCtrl#getServices");
-    $route->get('/departements/grades',"departementCtrl#getGrades");
-    $route->get('/departements/salary', "departementCtrl#getSalary");
+    Controller::useController("departementCtrl");
+    $route->get('/departements',(new departementCtrl)->getAllDepartements());
+    $route->get('/departements/services',(new departementCtrl)->getServices());
+    $route->get('/departements/grades',(new departementCtrl)->getGrades());
+    $route->get('/departements/salary', (new departementCtrl)->getSalary());
+    // 
+    $route->get("/departement/add", (new departementCtrl)->addDepartement());

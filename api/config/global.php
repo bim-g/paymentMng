@@ -5,7 +5,7 @@
      * they declare as global tho to have full acces where ever in the project
      */
     // load configguration 
-    $ini_array =(object) parse_ini_file("./core/config.ini", true);
+    $ini_array =(object) parse_ini_file("./config/config.ini", true);
     $db_conf= (object)$ini_array->db_conf;
 
     // database configuration setup

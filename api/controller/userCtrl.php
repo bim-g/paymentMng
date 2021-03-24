@@ -27,8 +27,8 @@ class userCtrl
                 $password= md5(Input::get('password'));
                 $data = [$username,$username, $password];                
                 $response=$this->user->connexion($data);
-                if(!$response){
-                    Response::send(["message"=>"echec de connexion :("],400);
+                if(isset($response['error'])){
+                    Response::send(["message"=> $response['error']],400);
                 }else{                    
                     Response::send($response);
                 }                
@@ -45,18 +45,20 @@ class userCtrl
         
     }
     function getAllEmployee(){
-        if (Token::check(Input::header('token'))) {
-        $response=$this->getEmployee();
-        Response::send($response);
-        }
-        Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+        // if (Token::check(Input::get('token'))) {
+            $response=$this->getEmployee();
+            Response::send(["status"=>200,"response"=>$response]);
+        // }else{
+        //     Response::send($_SESSION);
+        // }
     }
     function getEmployeDetail($id){
-        if(Token::check(Input::header('token'))){
+        // if(Token::check(Input::header('token'))){
             $response = $this->getEmployee($id);
-            Response::send($response);
-        }
-        Response::send(["status"=>400,"message"=>"vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+            Response::send(["status"=>200,"response"=> $response]);
+        // }else{
+        //     Response::send(["status"=>400,"message"=>"vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+        // }
     }
     function register(){
         if(Input::exists()){

@@ -14,8 +14,9 @@
                 $res=$this->bdd->query($sql,$data);  
                 if($res->result())  {
                     $result=json_encode($res->result());   
-                    $result=json_decode($result);             
-                    array_push($result, ["token" => Token::generate()]);
+                    $result=json_decode($result);
+                    $token= ["token" => Token::generate()];         
+                    array_push($result, $token);
                     return json_encode($result);
                 }            
                  return false;

@@ -41,8 +41,7 @@ app.service("initApp",function($http,$window,$location){
     this.gestAgents=function(cb){
         $http({
             method:"GET",
-            url:usersLink ,
-            headers:{'token':$window.sessionStorage.token}         
+            url: usersLink + `/?token=${$window.sessionStorage.token}`,
         }).then(function(response){
             cb(response.data);
         },errorServer);
@@ -51,7 +50,9 @@ app.service("initApp",function($http,$window,$location){
         $http({
             method:"GET",
             url:link+"user.php",
-            headers:{'token':$window.sessionStorage.token}          
+            headers:{
+                'Content-Type': 'application/json',
+                'token':$window.sessionStorage.token}          
         }).then(function(response){
             cb(response.data);
         },errorServer);
@@ -59,8 +60,8 @@ app.service("initApp",function($http,$window,$location){
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url: `${usersLink}/${id}/detail`,
-            headers:{'token':$window.sessionStorage.token} 
+            url: `${usersLink}/${id}/detail?token=${$window.sessionStorage.token}`,
+            // headers:{'token':} ;
         }).then(function(response){            
             cb(response.data); 
         },errorServer);
@@ -70,7 +71,7 @@ app.service("initApp",function($http,$window,$location){
         var param="config=addDepartement&Namedepart="+departName;
         $http({
             method:"POST",
-            url:departemantLink+"/myconfig.php",
+            url:departemantLink+"/add",
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded',
                     'token':$window.sessionStorage.token

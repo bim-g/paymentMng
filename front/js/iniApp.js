@@ -245,9 +245,8 @@ app.controller("employeeListCtrl",function($scope,initApp){
     $scope.$emit("allAgent");
     //get list of all employee
     initApp.gestAgents(function (r) {
-        if(angular.isObject(r) && !angular.isUndefined(r)){
-            console.log(r);
-            $scope.employees=r;
+        if(angular.isObject(r) && !angular.isUndefined(r) && r.status==200){
+            $scope.employees=JSON.parse(r.response);
         }else{            
             $scope.$emit('danger',{msg:r});
         }
@@ -294,7 +293,8 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
     $scope.searchAgent=function(){
         if(Number($scope.idAgent)){
             initApp.getDetaillAgent($scope.idAgent,function(r){
-                if(angular.isObject(r) && !angular.isUndefined(r)){
+                if (angular.isObject(r) && !angular.isUndefined(r) && r.status == 200) {
+                    r=JSON.parse(r.response);
 					var employee=r[0];
                     var famill=[];
                     if(r[1]){
@@ -313,8 +313,7 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
 					$scope.familly=famill;
 					$scope.nbenfant=famill.length;
 				}
-                else{
-                    
+                else{                    
                     $scope.$emit('danger',{msg:r});
                 }
             });

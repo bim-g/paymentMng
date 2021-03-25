@@ -24,9 +24,8 @@ app.service("initApp",function($http,$window,$location){
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
             let data=response.data.response?response.data.response:response.data;
-            let token=data[1].token;
-            var res=data[0];
-            console.log(res);
+            let token = data[1].token ? data[1].token:undefined;
+            var res = data[1].token ? data[0]:undefined;
             if (angular.isObject(res) && !angular.isUndefined(res.username) && response.data.status == 200) {
                 $window.sessionStorage.setItem("userId",res.idemployee);
                 $window.sessionStorage.setItem("userFName",res.Fname);
@@ -54,7 +53,6 @@ app.service("initApp",function($http,$window,$location){
                 'token': $window.sessionStorage.token
             }
         }).then(function(response){
-            console.log("llllllllllll",response);
             cb(response.data);
         },errorServer);
     };    
@@ -72,8 +70,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url: `${usersLink}/${id}/detail?token=${$window.sessionStorage.token}`,
-            // headers:{'token':} ;
+            url: `${usersLink}/${id}/detail`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){            
             cb(response.data); 
         },errorServer);
@@ -109,10 +109,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDepartment=function(cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/?token=${$window.sessionStorage.token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -155,10 +155,10 @@ app.service("initApp",function($http,$window,$location){
     this.getServices=function(src,cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/services${token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}/services`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer);
@@ -166,12 +166,11 @@ app.service("initApp",function($http,$window,$location){
     this.getConfigSalary=function(cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/salary${token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}/salary`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
-            console.log("22222222222222222",response); 
             cb(response.data); 
         },errorServer);
     };

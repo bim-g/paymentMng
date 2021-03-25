@@ -30,7 +30,7 @@ class userCtrl
                 if(isset($response['error'])){
                     Response::send(["message"=> $response['error']],400);
                 }else{                    
-                    Response::send($response);
+                    Response::send(["status" => 200, "response" => $response[0]]);
                 }                
             } else {
                 Response::send($this->validate->errors(), 400);

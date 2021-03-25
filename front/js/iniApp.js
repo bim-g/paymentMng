@@ -126,10 +126,12 @@ app.controller("login",function($scope,initApp){
 	$scope.connection=function(){
 		if(!angular.isUndefined($scope.loginUser)){
 			initApp.connection($scope.loginUser,function(r){
+                console.log(">>>>>>>>>>>>",r);
 				if(r=="connect"){
 					initApp.initilize();
 					$scope.$emit('login');
 				}else{
+
                     $scope.$emit('danger',{msg:(r.message?r.message:r)});
 				}
 			});			

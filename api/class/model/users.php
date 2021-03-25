@@ -17,7 +17,7 @@
                     $result=json_decode($result);
                     $token= ["token" => Token::generate()];         
                     array_push($result, $token);
-                    return json_encode($result);
+                    return $result;
                 }            
                  return false;
             }catch(Exception $ex){

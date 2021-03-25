@@ -12,15 +12,20 @@ app.service("initApp",function($http,$window,$location){
     };
     this.connection=function(user,cb){        
         var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
+        // var param={
+        //     connect:"getConnection",
+        //     username:user.userName,
+        //     password:user.passWord
+        // };
         $http({
             method:"POST",
             url: `${usersLink}/login`,
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
-            var res=response.data[0];
-            var token=response.data[1].token;
-            if(angular.isObject(res) && !angular.isUndefined(res)) {         
+            let data=response.data.response?response.data.response:response.data;
+            var res=response.data;
+            if (angular.isObject(res) && !angular.isUndefined(res) && response.data.status==200) {
                 $window.sessionStorage.setItem("userId",res.idemployee);
                 $window.sessionStorage.setItem("userFName",res.Fname);
                 $window.sessionStorage.setItem("userLName",res.Lname);
@@ -31,13 +36,13 @@ app.service("initApp",function($http,$window,$location){
                 $window.sessionStorage.setItem("userPhone",res.phone);
                 $window.sessionStorage.setItem("userSexe",res.sexe);
                 $window.sessionStorage.setItem("maretalSatus",res.maretalStatus);
-                $window.sessionStorage.setItem("token",token);
+                $window.sessionStorage.setItem("token",res.token);
                 $window.sessionStorage.setItem("menu",true);
                 cb("connect");
             }else{
-                cb(res);
+                cb(response.data);
             }
-        },errorServer)
+        },errorServer);
     };
     this.gestAgents=function(cb){
         $http({

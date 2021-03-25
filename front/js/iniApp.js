@@ -43,6 +43,9 @@ app.controller("initApp",function($rootScope,$scope,$location,$window,initApp){
         $scope.confirm=true;
     };
     
+    $scope.initModal=function(){
+        $scope.alert = $scope.succes = $scope.danger = $scope.confirm = false;
+    };
     $scope.aleRt=function(){
         $scope.alert=true;
     };

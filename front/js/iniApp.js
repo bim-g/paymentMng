@@ -130,7 +130,7 @@ app.controller("login",function($scope,initApp){
 					initApp.initilize();
 					$scope.$emit('login');
 				}else{
-                    $scope.$emit('danger',{msg:r});
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
 				}
 			});			
 		}
@@ -163,7 +163,7 @@ app.controller("homeCtrl",function($scope,$location,initApp){
 						$scope.nodata=true;
 					}
 				}else{
-                    $scope.$emit('danger',{msg:r});
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
 					$scope.nodata=false;
 				}
 			});
@@ -200,14 +200,14 @@ app.controller("addAgentCtrl",function($scope,$location,initApp){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.Myservices= r;
             }else{
-                $scope.$emit('danger',{msg:r});      
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});      
             }
         });	
         initApp.getGrade(function(r){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.grades= r;
             }else{                
-                $scope.$emit('danger',{msg:r});       
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});       
             }
         });	
     
@@ -245,11 +245,10 @@ app.controller("employeeListCtrl",function($scope,initApp){
     $scope.$emit("allAgent");
     //get list of all employee
     initApp.gestAgents(function (r) {
-        if(angular.isObject(r) && !angular.isUndefined(r)){
-            console.log(r);
-            $scope.employees=r;
+        if(angular.isObject(r) && !angular.isUndefined(r) && r.status==200){
+            $scope.employees=JSON.parse(r.response);
         }else{            
-            $scope.$emit('danger',{msg:r});
+            $scope.$emit('danger',{msg:(r.message?r.message:r)});
         }
     });
 
@@ -258,7 +257,7 @@ app.controller("employeeListCtrl",function($scope,initApp){
             if(angular.isObject(r) && !angular.isUndefined(r)){
                 $scope.students=r;
             }else{                
-                $scope.$emit('danger',{msg:r});
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});
             }
         });
     };
@@ -286,7 +285,7 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
                 $scope.transactions=r;
                 $scope.transact=r.length;
             }else{                
-                $scope.$emit('danger',{msg:r});
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});
             }
         });
     };
@@ -294,7 +293,8 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
     $scope.searchAgent=function(){
         if(Number($scope.idAgent)){
             initApp.getDetaillAgent($scope.idAgent,function(r){
-                if(angular.isObject(r) && !angular.isUndefined(r)){
+                if (angular.isObject(r) && !angular.isUndefined(r) && r.status == 200) {
+                    r=JSON.parse(r.response);
 					var employee=r[0];
                     var famill=[];
                     if(r[1]){
@@ -313,9 +313,8 @@ app.controller("detailEmployeeCtrl",function($scope,$window,$routeParams,initApp
 					$scope.familly=famill;
 					$scope.nbenfant=famill.length;
 				}
-                else{
-                    
-                    $scope.$emit('danger',{msg:r});
+                else{                    
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
                 }
             });
         }else{
@@ -347,20 +346,20 @@ app.controller("congigCtrl",function($scope,initApp){
     $scope.$emit("config");
     $scope.getDepart=function(){
         initApp.getDepartment(function(r){
-            if(angular.isObject(r) && !angular.isUndefined(r)){
-                $scope.departement= r;
+            if(angular.isObject(r) && !angular.isUndefined(r) && r.status==200){
+                $scope.departement= JSON.parse(r.response);
             }else{                
-                $scope.$emit('danger',{msg:r});
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});
             }
         });	
     };
     $scope.getDepart();
     $scope.displayServices=function(){
         initApp.getServices("services",function(r){
-            if(angular.isObject(r) && !angular.isUndefined(r)){
-                $scope.services= r;
+            if (angular.isObject(r) && !angular.isUndefined(r) && r.status == 200) {
+                $scope.services= JSON.parse(r.response);
             }else{                
-                $scope.$emit('danger',{msg:r});
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});
             }
         });	
     };
@@ -374,7 +373,7 @@ app.controller("congigCtrl",function($scope,initApp){
                     $scope.AddDepartName=null;
                     $scope.getDepart();
                 }else{                    
-                    $scope.$emit('danger',{msg:r});
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
                 }       
             }); 
         }else{
@@ -396,7 +395,7 @@ app.controller("congigCtrl",function($scope,initApp){
                 $scope.getDepart();
                 $scope.$emit('succes',{msg:"Department Delete Succesfully"});
             }else{
-                $scope.$emit('danger',{msg:r});
+                $scope.$emit('danger',{msg:(r.message?r.message:r)});
             }
         });
     };
@@ -413,7 +412,7 @@ app.controller("congigCtrl",function($scope,initApp){
                     $scope.displayServices();                    
                     $scope.$emit('succes',{msg:"Service add Succesfully"});
                 }else{                    
-                    $scope.$emit('danger',{msg:r});
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
                 }
             });
         }else{            
@@ -427,14 +426,18 @@ app.controller("congigCtrl",function($scope,initApp){
                     $scope.displayServices();                    
                     $scope.$emit('succes',{msg:"Department Delete Succesfully"});
                 }else{                    
-                    $scope.$emit('danger',{msg:r});
+                    $scope.$emit('danger',{msg:(r.message?r.message:r)});
                 }
             });
         }
     };
     $scope.getConfigSalary=function(){
         initApp.getConfigSalary(function(r){
-            $scope.confSal=r;
+            if (angular.isObject(r) && !angular.isUndefined(r) && r.status == 200){
+                $scope.confSal=JSON.parse(r.response);
+            }else{
+                $scope.$emit('danger',{msg:r});
+            }
         });
     };
     $scope.getConfigSalary();

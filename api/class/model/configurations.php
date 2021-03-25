@@ -42,7 +42,7 @@
         // 
         function getConfigSalary(){                     
             try{
-                $q=$this->bdd->get("grade")->field(["idgrade","gradeName","netsalary","childprime"])->result();                            
+                $q=$this->bdd->get("grade")->fields(["idgrade","gradeName","netsalary","childprime"])->result();                            
                 $res=json_encode($q);
                 $res=json_decode($res,true);
                 $confSalary=[];
@@ -62,39 +62,38 @@
         }
         // 
         private function getPimePost(int $idgrade){            
-            $table= "employeeprime emp JOIN primeongrade pri ON emp.idprime=pri.idprime";
-            $where=["pri.idgrade","=",(int)$idgrade];
+            $table= "employeeprime as em_p JOIN primeongrade as pri_on ON em_p.idprime=pri_on.idprime";
+            $where=["pri_on.idgrade","=",(int)$idgrade];
             try{
-                $q=$this->bdd->get($table)->where($where)->field(["typeprime", "emp.mountprime"])->result();                                      
-                $res=json_encode($q);
-                $result=json_decode($res,true);                
-                $prime=array();
-                foreach($result as $item){
-                    array_push($prime,array(
-                        "typeprime"=>$item['typeprime'],
-                        "amountPrime"=>$item['mountprime']
-                    ));
-                }
-                return $prime;
+                
+                    $query = $this->bdd->query("select em_p.typeprime,em_p.mountprime FROM employeeprime em_p JOIN primeongrade pri_on ON em_p.idprime=pri_on.idprime WHERE pri_on.idgrade=?",[(int)$idgrade])->result();                                    
+                    if($this->bdd->error()){
+                        throw new Exception($this->bdd->error());
+                    }; 
+                    $res=json_encode($query);
+                    $result=json_decode($res,true);             
+                    $prime=array();
+                    foreach($result as $item){
+                        array_push($prime,array(
+                            "typeprime"=>$item['typeprime'],
+                            "amountPrime"=>$item['mountprime']
+                        ));
+                    }
+                    return $prime;
             }catch(Exception $ex){
                 return ["Exception"=>$ex->getMessage()];
             }
         }
         // 
-        function addDepartement(){
-            // $req="INSERT INTO departement VALUES(0,:departName,CURRENT_TIMESTAMP)";            
+        function addDepartement(){      
             try{
                 $this->bdd->insert("departement")->field()->result();
                 if ($this->bdd->error()) {
                     throw new Exception($this->bdd->error());
                 }
-                // $q=$this->bdd->prepare($req); 
-                // $q->bindParam(":departName",$this->nameServ);                         
-                // $q->execute();
-                // echo "success depart";
                 return true;
             }catch(Exception $ex){
-                echo "error_getPrime of a post=>".$ex->getMessage();
+                return[ "error".$ex->getMessage()];
             }
         }
         // 

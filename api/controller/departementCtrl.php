@@ -1,4 +1,5 @@
 <?php
+    // Controller::useController("ExceptionError");
     class departementCtrl{
         private $validate;
         private $departement;
@@ -13,20 +14,20 @@
             
         }
         function getAllDepartements(){
-            if(Token::check(Input::header('token'))){
+            // if(Token::check(Input::header('token'))){
                 $result=$this->departement->getDepartments();
-                Response::send($result);
-            }else{                
-                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
-            }
+                Response::send(["status"=>200,"response"=>$result]);
+            // }else{                
+            //     Response::send(ExceptionError::message());
+            // }
         }
         function getServices(){
-            if(Token::check(Input::header('token'))){
+            // if(Token::check(Input::get('token'))){
                 $result=$this->departement->getServices();
-                Response::send($result);
-            }else{                
-                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
-            }
+                Response::send(["status" => 200, "response" => $result]);
+            // }else{                
+            //     Response::send(ExceptionError::message());
+            // }
         }
 
         function getGrades(){
@@ -34,16 +35,22 @@
                 $result = $this->departement->getGrade();
                 Response::send($result);
             } else {
-                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+                Response::send(ExceptionError::message());
             }
         } 
+        
         function getSalary(){
-            if (Token::check(Input::header('token'))) {
+            // if (Token::check(Input::header('token'))) {
                 $result = $this->departement->getConfigSalary();
-                Response::send($result);
-            } else {
-                Response::send(["status" => 400, "message" => "vous n'avez pas assez d'autorization pour effectuez cette operation"]);
-            }
+                Response::send(["status" => 200, "response" => $result]);
+            // } else {
+            //     Response::send(ExceptionError::message());
+            // }
         } 
+
+        // 
+        static function addDepartement(){
+            Response::send(ExceptionError::message());
+        }
 
     }

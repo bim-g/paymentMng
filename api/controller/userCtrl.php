@@ -30,7 +30,7 @@ class userCtrl
                 if(isset($response['error'])){
                     Response::send(["message"=> $response['error']],400);
                 }else{                    
-                    Response::send(["status" => 200, "response" => $response[0]]);
+                    Response::send(["status" => 200, "response" => $response]);
                 }                
             } else {
                 Response::send($this->validate->errors(), 400);
@@ -45,12 +45,12 @@ class userCtrl
         
     }
     function getAllEmployee(){
-        // if (Token::check(Input::get('token'))) {
+        if (Token::check(Input::header('token'))) {
             $response=$this->getEmployee();
             Response::send(["status"=>200,"response"=>$response]);
-        // }else{
-        //     Response::send($_SESSION);
-        // }
+        }else{
+            Response::send(ExceptionError::message());
+        }
     }
     function getEmployeDetail($id){
         // if(Token::check(Input::header('token'))){

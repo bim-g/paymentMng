@@ -24,8 +24,10 @@ app.service("initApp",function($http,$window,$location){
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
             let data=response.data.response?response.data.response:response.data;
-            var res=response.data;
-            if (angular.isObject(res) && !angular.isUndefined(res) && response.data.status==200) {
+            let token=data[1].token;
+            var res=data[0];
+            console.log(res);
+            if (angular.isObject(res) && !angular.isUndefined(res.username) && response.data.status == 200) {
                 $window.sessionStorage.setItem("userId",res.idemployee);
                 $window.sessionStorage.setItem("userFName",res.Fname);
                 $window.sessionStorage.setItem("userLName",res.Lname);
@@ -36,7 +38,7 @@ app.service("initApp",function($http,$window,$location){
                 $window.sessionStorage.setItem("userPhone",res.phone);
                 $window.sessionStorage.setItem("userSexe",res.sexe);
                 $window.sessionStorage.setItem("maretalSatus",res.maretalStatus);
-                $window.sessionStorage.setItem("token",res.token);
+                $window.sessionStorage.setItem("token",token);
                 $window.sessionStorage.setItem("menu",true);
                 cb("connect");
             }else{
@@ -47,8 +49,12 @@ app.service("initApp",function($http,$window,$location){
     this.gestAgents=function(cb){
         $http({
             method:"GET",
-            url: usersLink + `/?token=${$window.sessionStorage.token}`,
+            url: usersLink ,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
+            console.log("llllllllllll",response);
             cb(response.data);
         },errorServer);
     };    

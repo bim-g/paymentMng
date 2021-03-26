@@ -8,7 +8,7 @@ class userCtrl
         $this->user = new users();
         $this->validate = new Validate();
     }
-    function connexion()    {
+    function connexion()    {  
         if (Input::exists()) {
             $this->validate->check($_POST, [
                 "username" => [
@@ -26,11 +26,15 @@ class userCtrl
                 $username= Input::get('username');
                 $password= md5(Input::get('password'));
                 $data = [$username,$username, $password];                
-                $response=$this->user->connexion($data);
-                if(isset($response['error'])){
-                    Response::send(["message"=> $response['error']],400);
-                }else{                    
-                    Response::send(["status" => 200, "response" => $response]);
+                $result=$this->user->connexion($data);
+                if(isset($result['error'])){
+                    Response::send(["message"=> $result['error']],400);
+                }else{    
+                    $response=["status" => 400,"message" => "wrong login information"];
+                    if($result){
+                        $response=["status" => 200,"response" => $result,"message" => "connected"];
+                    }         
+                    Response::send($response);
                 }                
             } else {
                 Response::send($this->validate->errors(), 400);

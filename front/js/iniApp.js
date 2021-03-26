@@ -43,6 +43,9 @@ app.controller("initApp",function($rootScope,$scope,$location,$window,initApp){
         $scope.confirm=true;
     };
     
+    $scope.initModal=function(){
+        $scope.alert = $scope.succes = $scope.danger = $scope.confirm = false;
+    };
     $scope.aleRt=function(){
         $scope.alert=true;
     };
@@ -126,10 +129,12 @@ app.controller("login",function($scope,initApp){
 	$scope.connection=function(){
 		if(!angular.isUndefined($scope.loginUser)){
 			initApp.connection($scope.loginUser,function(r){
+                console.log(">>>>>>>>>>>>",r);
 				if(r=="connect"){
 					initApp.initilize();
 					$scope.$emit('login');
 				}else{
+
                     $scope.$emit('danger',{msg:(r.message?r.message:r)});
 				}
 			});			

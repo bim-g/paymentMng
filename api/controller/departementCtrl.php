@@ -14,20 +14,20 @@
             
         }
         function getAllDepartements(){
-            // if(Token::check(Input::header('token'))){
+            if(Token::check(Input::header('token'))){
                 $result=$this->departement->getDepartments();
                 Response::send(["status"=>200,"response"=>$result]);
-            // }else{                
-            //     Response::send(ExceptionError::message());
-            // }
+            }else{                
+                Response::send(ExceptionError::message());
+            }
         }
         function getServices(){
-            // if(Token::check(Input::get('token'))){
+            if(Token::check(Input::header('token'))){
                 $result=$this->departement->getServices();
                 Response::send(["status" => 200, "response" => $result]);
-            // }else{                
-            //     Response::send(ExceptionError::message());
-            // }
+            }else{                
+                Response::send(ExceptionError::message());
+            }
         }
 
         function getGrades(){
@@ -40,17 +40,16 @@
         } 
         
         function getSalary(){
-            // if (Token::check(Input::header('token'))) {
+            if (Token::check(Input::header('token'))) {
                 $result = $this->departement->getConfigSalary();
                 Response::send(["status" => 200, "response" => $result]);
-            // } else {
-            //     Response::send(ExceptionError::message());
-            // }
+            } else {
+                Response::send(ExceptionError::message());
+            }
         } 
 
         // 
         static function addDepartement(){
-            Response::send(ExceptionError::message());
         }
 
     }

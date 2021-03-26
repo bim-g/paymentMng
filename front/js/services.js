@@ -12,15 +12,21 @@ app.service("initApp",function($http,$window,$location){
     };
     this.connection=function(user,cb){        
         var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
+        // var param={
+        //     connect:"getConnection",
+        //     username:user.userName,
+        //     password:user.passWord
+        // };
         $http({
             method:"POST",
             url: `${usersLink}/login`,
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
-            var res=response.data[0];
-            var token=response.data[1].token;
-            if(angular.isObject(res) && !angular.isUndefined(res)) {         
+            let data=response.data.response?response.data.response:response.data;
+            let token = data[1].token ? data[1].token:undefined;
+            var res = data[1].token ? data[0]:undefined;
+            if (angular.isObject(res) && !angular.isUndefined(res.username) && response.data.status == 200) {
                 $window.sessionStorage.setItem("userId",res.idemployee);
                 $window.sessionStorage.setItem("userFName",res.Fname);
                 $window.sessionStorage.setItem("userLName",res.Lname);
@@ -35,14 +41,17 @@ app.service("initApp",function($http,$window,$location){
                 $window.sessionStorage.setItem("menu",true);
                 cb("connect");
             }else{
-                cb(res);
+                cb(response.data);
             }
-        },errorServer)
+        },errorServer);
     };
     this.gestAgents=function(cb){
         $http({
             method:"GET",
-            url: usersLink + `/?token=${$window.sessionStorage.token}`,
+            url: usersLink ,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data);
         },errorServer);
@@ -61,8 +70,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDetaillAgent=function(id,cb){
         $http({
             method:"GET",
-            url: `${usersLink}/${id}/detail?token=${$window.sessionStorage.token}`,
-            // headers:{'token':} ;
+            url: `${usersLink}/${id}/detail`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){            
             cb(response.data); 
         },errorServer);
@@ -98,10 +109,10 @@ app.service("initApp",function($http,$window,$location){
     this.getDepartment=function(cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/?token=${$window.sessionStorage.token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer)
@@ -144,10 +155,10 @@ app.service("initApp",function($http,$window,$location){
     this.getServices=function(src,cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/services${token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}/services`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
             cb(response.data); 
         },errorServer);
@@ -155,12 +166,11 @@ app.service("initApp",function($http,$window,$location){
     this.getConfigSalary=function(cb){
         $http({
             method:"GET",
-            url: `${departemantLink}/salary${token}`,
-            // headers: {
-            //     'token': $window.sessionStorage.token
-            // }
+            url: `${departemantLink}/salary`,
+            headers: {
+                'token': $window.sessionStorage.token
+            }
         }).then(function(response){
-            console.log("22222222222222222",response); 
             cb(response.data); 
         },errorServer);
     };

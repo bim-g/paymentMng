@@ -11,36 +11,41 @@ app.service("initApp",function($http,$window,$location){
 		$location.path(url);		
     };
     this.connection=function(user,cb){        
-        var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
-        // var param={
-        //     connect:"getConnection",
-        //     username:user.userName,
-        //     password:user.passWord
-        // };
+        // var param="connect=getConnection&username="+user.userName+"&password="+user.passWord;
+        var param={
+            connect:"getConnection",
+            username:user.userName,
+            password:user.passWord
+        };
         $http({
             method:"POST",
             url: `${usersLink}/login`,
             data:param,
             headers:{'Content-Type':'application/x-www-form-urlencoded'}
         }).then(function(response){
-            let data=response.data.response?response.data.response:response.data;
-            let token = data[1].token ? data[1].token:undefined;
-            var res = data[1].token ? data[0]:undefined;
-            if (angular.isObject(res) && !angular.isUndefined(res.username) && response.data.status == 200) {
-                $window.sessionStorage.setItem("userId",res.idemployee);
-                $window.sessionStorage.setItem("userFName",res.Fname);
-                $window.sessionStorage.setItem("userLName",res.Lname);
-                $window.sessionStorage.setItem("userType",res.idtypeAccess);
-                $window.sessionStorage.setItem("userPseudo",res.username);
-                $window.sessionStorage.setItem("userEmail",res.email);
-                $window.sessionStorage.setItem("userBithday",res.birthday);
-                $window.sessionStorage.setItem("userPhone",res.phone);
-                $window.sessionStorage.setItem("userSexe",res.sexe);
-                $window.sessionStorage.setItem("maretalSatus",res.maretalStatus);
-                $window.sessionStorage.setItem("token",token);
-                $window.sessionStorage.setItem("menu",true);
-                cb("connect");
-            }else{
+            console.log(response.data)
+            if(response.data.status==200){
+                let data=response.data.response?response.data.response:response.data;
+                let token = data[1].token ? data[1].token:undefined;
+                var res = data[1].token ? data[0]:undefined;
+                if (angular.isObject(res) && !angular.isUndefined(res.username)) {
+                    $window.sessionStorage.setItem("userId",res.idemployee);
+                    $window.sessionStorage.setItem("userFName",res.Fname);
+                    $window.sessionStorage.setItem("userLName",res.Lname);
+                    $window.sessionStorage.setItem("userType",res.idtypeAccess);
+                    $window.sessionStorage.setItem("userPseudo",res.username);
+                    $window.sessionStorage.setItem("userEmail",res.email);
+                    $window.sessionStorage.setItem("userBithday",res.birthday);
+                    $window.sessionStorage.setItem("userPhone",res.phone);
+                    $window.sessionStorage.setItem("userSexe",res.sexe);
+                    $window.sessionStorage.setItem("maretalSatus",res.maretalStatus);
+                    $window.sessionStorage.setItem("token",token);
+                    $window.sessionStorage.setItem("menu",true);
+                    cb("connect");
+                }else{
+                    cb(response.data);
+                }
+            } else {
                 cb(response.data);
             }
         },errorServer);

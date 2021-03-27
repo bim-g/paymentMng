@@ -10,9 +10,10 @@
         }
 
         function check($source,$items=array()){
+            $source=json_decode(array_keys($source)[0])?((array)json_decode(array_keys($source)[0])):$source;
             foreach($items as $item=>$rules){
                 foreach($rules as $rule=>$rvalue){
-
+                    
                     $value= is_array($source[$item]) ? $source[$item]['name'] : trim($source[$item]);
                     $item=escape($item);
                     

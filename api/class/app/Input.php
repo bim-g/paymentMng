@@ -1,20 +1,18 @@
 <?php    
     class Input{
+        
         static function exists($type="POST"){
             switch($type){
                 case "POST":
-                    return (!empty($_POST))?true:false;
+                    return (!empty($_POST))|| put()?true:false;
                 break;
                 default: 
                     return false;
                 break;
             }
         }
-        static function get($item){
-            $object_data=[];
-            if(json_decode(file_get_contents("php://input"), true)){
-                $object_data=(array)(json_decode(file_get_contents("php://input"), true));
-            }
+        static function get($item){   
+            $object_data= put();
             if(isset($_POST[$item])){
                 return $_POST[$item];
             }else if(isset($_GET[$item])){
@@ -30,5 +28,8 @@
                 return $headers[$item];
             }
             return false;
+        }
+        static function post(){
+            return (!empty($_POST))?$_POST:put();
         }
     }

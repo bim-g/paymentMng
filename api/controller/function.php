@@ -51,3 +51,35 @@
         ];        
         return $myDay[$format][$day];
     }
+//    
+    function put(){
+        $fragma = [];
+        if (file_get_contents("php://input")) {
+            $file_input= file_get_contents("php://input");
+            if(json_decode($file_input)){
+                return (array)json_decode($file_input,true);
+            }
+            else{                
+                $explode=explode("\r",implode("\r",explode("\n",$file_input)));
+                $len_Arr=count($explode);
+                for($i=1;$i<$len_Arr;$i++){
+                    if(!strchr($explode[$i], "----------------------------")){
+                        if (strlen($explode[$i]) > 0) {
+                            $replaced = str_replace("Content-Disposition: form-data; name=", "", $explode[$i]);
+                            array_push($fragma, $replaced);
+                        }
+                    }
+                }
+                $len_object=count($fragma);
+                $object=[];
+                for($j=0;$j<$len_object;$j++){
+                    if($j==0 || ($j+1)%2!=0){
+                        $key=str_replace("\"","", $fragma[$j]);
+                        $object = array_merge($object,[$key=> trim($fragma[($j+1)])]);
+                    }
+                }
+                return $object;
+            }            
+        }
+        return false;
+    }

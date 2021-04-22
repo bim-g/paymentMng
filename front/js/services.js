@@ -21,7 +21,7 @@ app.service("initApp",function($http,$window,$location){
             method:"POST",
             url: `${usersLink}/login`,
             data:param,
-            headers:{'Content-Type':'application/x-www-form-urlencoded'}
+            headers:{'Content-Type':'application/json'}
         }).then(function(response){
             console.log(response.data)
             if(response.data.status==200){
@@ -183,5 +183,5 @@ app.service("initApp",function($http,$window,$location){
 });
 
 var errorServer=function(response){
-    console.log("Problem connection on server::"+response);
+    console.log("Problem connection on server::",response);
 };

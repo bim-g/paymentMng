@@ -10,7 +10,7 @@ class userCtrl
     }
     function connexion()    {  
         if (Input::exists()) {
-            $this->validate->check($_POST, [
+            $this->validate->check(Input::post(), [
                 "username" => [
                     "required" => true,
                     "min" => 3,
@@ -57,12 +57,12 @@ class userCtrl
         }
     }
     function getEmployeDetail($id){
-        // if(Token::check(Input::header('token'))){
+         if(Token::check(Input::header('token'))){
             $response = $this->getEmployee($id);
             Response::send(["status"=>200,"response"=> $response]);
-        // }else{
-        //     Response::send(["status"=>400,"message"=>"vous n'avez pas assez d'autorization pour effectuez cette operation"]);
-        // }
+         }else{
+            Response::send(["status"=>400,"message"=>"vous n'avez pas assez d'autorization pour effectuez cette operation"]);
+         }
     }
     function register(){
         if(Input::exists()){
